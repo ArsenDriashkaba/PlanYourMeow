@@ -6,14 +6,12 @@ const addBoard = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const firstName = req.body.firstName;
-      const secondName = req.body.secondName;
-      const email = req.body.email;
-      const password = req.body.password;
+      const name = req.body.name;
+      const workspaceId = req.body.workspaceId;
 
       database.query(
-        `INSERT INTO users (first_name, second_name, email, password) VALUES (?, ?, ?, ?)`,
-        [firstName, secondName, email, password],
+        `INSERT INTO workspaces (name, workspace_id) VALUES (?, ?)`,
+        [name, workspaceId],
         (err, result) => {
           if (err) {
             console.log(err);

@@ -6,14 +6,13 @@ const addRoleToUserInTeam = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const firstName = req.body.firstName;
-      const secondName = req.body.secondName;
-      const email = req.body.email;
-      const password = req.body.password;
+      const userId = req.body.userId;
+      const workspaceId = req.body.workspaceId;
+      const roleId = req.body.roleId;
 
       database.query(
-        `INSERT INTO users (first_name, second_name, email, password) VALUES (?, ?, ?, ?)`,
-        [firstName, secondName, email, password],
+        `INSERT INTO users (user_id, workspace_id, role_id) VALUES (?, ?, ?)`,
+        [userId, workspaceId, roleId],
         (err, result) => {
           if (err) {
             console.log(err);

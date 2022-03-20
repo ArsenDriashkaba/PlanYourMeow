@@ -6,14 +6,11 @@ const addRole = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const firstName = req.body.firstName;
-      const secondName = req.body.secondName;
-      const email = req.body.email;
-      const password = req.body.password;
+      const name = req.body.name;
 
       database.query(
-        `INSERT INTO users (first_name, second_name, email, password) VALUES (?, ?, ?, ?)`,
-        [firstName, secondName, email, password],
+        `INSERT INTO roles (name) VALUES (?)`,
+        [name],
         (err, result) => {
           if (err) {
             console.log(err);

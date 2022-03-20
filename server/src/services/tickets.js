@@ -1,4 +1,4 @@
-import { validationResult } from "express-validator";
+import { sanitize, validationResult } from "express-validator";
 import { database } from "../..";
 
 const addTicket = async (req, res) => {
@@ -6,14 +6,17 @@ const addTicket = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const firstName = req.body.firstName;
-      const secondName = req.body.secondName;
-      const email = req.body.email;
-      const password = req.body.password;
+      const name = req.body.name;
+      const description = req.body.description;
+      const deadline = req.body.deadline;
+      const boardId = req.body.boardId;
+      const label = req.body.label;
+      const idOfAssignedUser = req.body.idOfAssignedUser;
+      const state = req.body.state;
 
       database.query(
-        `INSERT INTO users (first_name, second_name, email, password) VALUES (?, ?, ?, ?)`,
-        [firstName, secondName, email, password],
+        `INSERT INTO users (name, description, deadline, board_id, label, id_of_assigned_user, state) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [name, description, deadline, boardId, label, idOfAssignedUser, state],
         (err, result) => {
           if (err) {
             console.log(err);
