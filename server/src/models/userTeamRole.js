@@ -3,7 +3,7 @@ import Sequelize from "sequelize";
 const { DataTypes } = Sequelize;
 
 const userTeamRole = (sequelize) => {
-  const userTeamRoleModel = sequelize.define("user_team_role", {
+  const userTeamRoleModel = sequelize.define("userTeamRole", {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

@@ -20,12 +20,9 @@ const applyRelations = (sequelize) => {
   workspace.belongsTo(userTeamRole);
 };
 
-const sequelize = new Sequelize({
+const sequelize = new Sequelize("plan_your_meow_db", "root", "Strila654789", {
   dialect: "mysql",
-  user: "root",
-  password: "Strila654789",
   host: "localhost",
-  database: "plan_your_meow_db",
 });
 
 const models = [board, role, ticket, user, userTeamRole, workspace];
