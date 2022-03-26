@@ -103,8 +103,6 @@ const editUserDataById = async (req, res) => {
     const userModel = await sequelize.models.user;
 
     reqBodyKeys.forEach(async (attribute) => {
-      console.log(attribute);
-
       switch (attribute) {
         case "firstName":
           await userModel.update(

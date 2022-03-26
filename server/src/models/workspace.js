@@ -20,13 +20,6 @@ const workspace = (sequelize) => {
         notEmpty: true,
       },
     },
-    admin_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
   });
 
   return workspaceModel;

@@ -28,6 +28,8 @@ app.use((req, _, next) => {
 });
 
 app.use("/users", routes.users);
+app.use("/boards", routes.boards);
+app.use("/workspaces", routes.workspaces);
 
 app.all("*", (_, res) => {
   res.status(404);

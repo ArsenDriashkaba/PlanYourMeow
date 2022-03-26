@@ -20,13 +20,6 @@ const board = (sequelize) => {
         notEmpty: true,
       },
     },
-    workspace_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
   });
 
   return boardModel;
