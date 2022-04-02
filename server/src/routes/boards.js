@@ -5,7 +5,7 @@ import services from "../services";
 
 const router = express.Router();
 
-router.post("/addBoard", services.boards.addBoard);
+router.post("/", services.boards.addBoard);
 
 router.get("/", services.boards.getAllBoards);
 

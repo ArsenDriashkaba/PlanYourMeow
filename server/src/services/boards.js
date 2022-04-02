@@ -1,57 +1,119 @@
 import { validationResult } from "express-validator";
-import { database } from "../..";
+import sequelize from "../config/database";
 
 const addBoard = async (req, res) => {
   try {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const name = req.body.name;
-      const workspaceId = req.body.workspaceId;
+      const { name, workspaceId } = { ...req.body };
 
-      database.query(
-        `INSERT INTO workspaces (name, workspace_id) VALUES (?, ?)`,
-        [name, workspaceId],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.status(200).send(result);
-          }
-        }
-      );
+      const newBoard = await sequelize.models.board.create({
+        name: name,
+        workspaceId: workspaceId,
+      });
+
+      res.status(200).send(newBoard);
     } else {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
     }
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.status(500).send("Error!");
   }
 };
 
 const getAllBoards = async (req, res) => {
   try {
-    req.log.info("Success");
-    res.status(200).send("Hello");
+    const boards = await req.context.models.board.findAll();
+
+    res.status(200).send(boards);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };
 
 const getBoardById = async (req, res) => {};
 
-const editBoardById = async (req, res) => {};
+const editBoardById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const boardId = req.params.id;
+    const board = await req.context.models.board.findOne({
+      where: { id: boardId },
+    });
+
+    if (board == null) {
+      const boardNotFoundMsg = `User with id "${boardId}" is not found...`;
+
+      console.log(boardNotFoundMsg);
+      res.status(404).send(boardNotFoundMsg);
+
+      return;
+    }
+
+    const boardModel = await sequelize.models.board;
+
+    await boardModel.update(
+      {
+        name: req.body.name,
+      },
+      { where: { id: boardId } }
+    );
+
+    const successMsg = `You've succsesfully updated board with id: ${req.params.id}`;
+
+    console.log(successMsg);
+    res.status(200).send(successMsg);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
 
 const deleteBoardById = async (req, res) => {
   try {
-    const successMsg = `You've succsesfully deleted blog with id: ${req.params.id}`;
+    const validationResults = validationResult(req);
 
-    req.log.info(successMsg);
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const boardId = req.params.id;
+    const board = await req.context.models.board.findOne({
+      where: { id: boardId },
+    });
+
+    if (board == null) {
+      const boardNotFoundMsg = `User with id "${boardId}" is not found...`;
+
+      console.log(boardNotFoundMsg);
+      res.status(404).send(boardNotFoundMsg);
+
+      return;
+    }
+
+    await sequelize.models.board.destroy({ where: { id: boardId } });
+
+    const successMsg = `You've succsesfully deleted board with id: ${req.params.id}`;
+
+    console.log(successMsg);
     res.status(200).send(successMsg);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };

@@ -5,7 +5,7 @@ import services from "../services";
 
 const router = express.Router();
 
-router.post("/addWorkspace", services.workspaces.addWorkspace);
+router.post("/", services.workspaces.addWorkspace);
 
 router.get("/", services.workspaces.getAllWorkspaces);
 
