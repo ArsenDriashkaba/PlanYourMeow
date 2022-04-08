@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import sequelize from "./src/config/database";
 import routes from "./src/routes";
 
-const PORT = 3000;
+const PORT = 3001;
 
 export const database = mysql.createConnection({
   user: "root",

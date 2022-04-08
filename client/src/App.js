@@ -1,14 +1,15 @@
-import React from "react";
-import Board from "./Components/Board/Board";
-import Nav from "./Components/Nav/Nav";
-import "./style.css";
+import { BrowserRouter as Router } from "react-router-dom";
+
+import Layout from "./Components/Layout/Layout";
+import { Routes } from "./Routes";
 
 const App = () => {
   return (
-    <div>
-      <Nav />
-      <Board />
-    </div>
+    <Router>
+      <Layout>
+        <Routes />
+      </Layout>
+    </Router>
   );
 };
 
