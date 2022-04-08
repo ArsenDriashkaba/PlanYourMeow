@@ -35,7 +35,23 @@ const getAllWorkspaces = async (req, res) => {
   }
 };
 
-const getWorkspaceById = async (req, res) => {};
+const getWorkspaceById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    if (validationResults.isEmpty()) {
+      const workspace = await req.context.models.workspace.findOne({
+        where: { id: req.params.id },
+      });
+
+      res.status(200).send(workspace);
+    } else {
+      res.send(400);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
 
 const editWorkspaceById = async (req, res) => {
   try {
