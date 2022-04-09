@@ -1,0 +1,11 @@
+#all-workspaces-section {
+  min-height: 80vh;
+}
+
+#workspaces-main-header {
+  min-height: 8vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

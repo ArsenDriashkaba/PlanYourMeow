@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import "./style.css";
+import "./WorkspacePreview.css";
 
 const WorkspacePreview = ({ name, workspace_id }) => {
   return (
     <div className="workspace-preview">
-      <Link to={`/workspaces/${workspace_id}`}>
+      <Link className="workspace-name" to={`/workspaces/${workspace_id}`}>
         <h2>{name}</h2>
       </Link>
       <p>Number of participants: {0}</p>

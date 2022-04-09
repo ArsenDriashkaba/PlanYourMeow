@@ -1,5 +1,5 @@
-const SearchInput = (props) => {
-  return <input type="text" />;
+const SearchInput = ({ onChange }) => {
+  return <input type="text" onChange={onChange} />;
 };
 
 export default SearchInput;

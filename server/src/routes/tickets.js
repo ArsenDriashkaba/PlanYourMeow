@@ -5,7 +5,7 @@ import services from "../services";
 
 const router = express.Router();
 
-router.post("/addTicket", services.tickets.addTicket);
+router.post("/", services.tickets.addTicket);
 
 router.get("/", services.tickets.getAllTickets);
 

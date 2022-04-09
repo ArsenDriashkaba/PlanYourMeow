@@ -38,10 +38,20 @@ const getAllWorkspaces = async (req, res) => {
 const getWorkspaceById = async (req, res) => {
   try {
     const validationResults = validationResult(req);
+    const models = req.context.models;
+    const workspaceModel = models.workspace;
+    const boardModel = models.board;
+    const ticketModel = models.ticket;
+
     if (validationResults.isEmpty()) {
-      const workspace = await req.context.models.workspace.findOne({
+      const workspace = await workspaceModel.findOne({
         where: { id: req.params.id },
-        include: [{ model: req.context.models.board }],
+        include: [
+          {
+            model: boardModel,
+            include: [{ model: ticketModel }],
+          },
+        ],
       });
 
       res.status(200).send(workspace);

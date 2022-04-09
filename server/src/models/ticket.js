@@ -26,22 +26,8 @@ const ticket = (sequelize) => {
     deadline: {
       type: DataTypes.DATE,
     },
-    board_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     label: {
       type: DataTypes.STRING,
-    },
-    id_of_assigned_user: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     state: {
       type: DataTypes.STRING,

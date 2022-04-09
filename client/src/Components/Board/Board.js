@@ -2,7 +2,7 @@ import React from "react";
 import TicketList from "../Ticket/TicketList/TicketList";
 import "./style.css";
 
-const Board = ({ name, board_id }) => {
+const Board = ({ name, tickets }) => {
   return (
     <div className="board">
       <header className="board-header">
@@ -15,7 +15,7 @@ const Board = ({ name, board_id }) => {
         <input type="text" />
         <button className="add-ticket">+</button>
       </div>
-      <TicketList tickets={[]} />
+      <TicketList tickets={tickets} />
     </div>
   );
 };

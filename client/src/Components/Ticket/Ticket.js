@@ -1,12 +1,11 @@
 import React from "react";
 import "./style.css";
 
-const Ticket = () => {
+const Ticket = ({ name }) => {
   return (
     <div className="ticket">
       <header className="ticket-header">
-        <h2 className="name">LALALALALA</h2>
-        <date className="deadline">10</date>
+        <h2 className="name">{name}</h2>
       </header>
       <div>
         <div className="ticket-person"></div>

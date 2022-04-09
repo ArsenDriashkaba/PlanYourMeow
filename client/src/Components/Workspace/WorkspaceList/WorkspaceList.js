@@ -1,4 +1,5 @@
 import WorkspacePreview from "../WorkspacePreview/WorkspacePreview";
+import "./WorkspaceList.css";
 
 const WorkspaceList = ({ workspaces }) => {
   return (

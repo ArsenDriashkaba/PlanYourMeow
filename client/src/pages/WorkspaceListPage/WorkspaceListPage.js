@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import api from "../../Api";
+import "./WorkspaceListPage.css";
 
 import SearchInput from "../../Components/SearchInput/SearchInput";
 import WorkspaceList from "../../Components/Workspace/WorkspaceList/WorkspaceList";
@@ -26,16 +27,18 @@ const WorkspaceListPage = () => {
   }, []);
 
   return (
-    <div>
-      <h1>All workspaces</h1>
-      <SearchInput
-        value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
-      />
+    <section id="all-workspaces-section">
+      <header id="workspaces-main-header">
+        <h1>All workspaces</h1>
+        <SearchInput
+          value={searchValue}
+          onChange={(event) => setSearchValue(event.target.value)}
+        />
+      </header>
       {isLoading && <p>Page is loading</p>}
       {error && <p>Page error :c</p>}
       <WorkspaceList workspaces={filteredWorkspaces} />
-    </div>
+    </section>
   );
 };
 

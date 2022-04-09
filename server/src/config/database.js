@@ -12,6 +12,7 @@ const applyRelations = (sequelize) => {
     sequelize.models;
 
   user.hasMany(ticket);
+  ticket.belongsTo(user);
   workspace.belongsTo(user);
   workspace.hasMany(board);
   board.hasMany(ticket);
