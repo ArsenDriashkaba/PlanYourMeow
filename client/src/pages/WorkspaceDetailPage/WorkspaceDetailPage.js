@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 
 import api from "../../Api";
 
+import BoardList from "../../Components/Board/BoardList/BoardList";
+
 const WorkspaceDetailPage = () => {
   const { id } = useParams();
   const [workspace, setWorkspace] = useState([]);
@@ -30,7 +32,7 @@ const WorkspaceDetailPage = () => {
   return (
     <div>
       <h1>{workspace?.name}</h1>
-      <p>Here is a workspace with all boards. ._.</p>
+      <BoardList boards={workspace?.boards} />
     </div>
   );
 };

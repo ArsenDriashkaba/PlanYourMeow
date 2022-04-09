@@ -26,7 +26,9 @@ const addBoard = async (req, res) => {
 
 const getAllBoards = async (req, res) => {
   try {
-    const boards = await req.context.models.board.findAll();
+    const boards = await req.context.models.board.findAll({
+      include: [{ model: req.context.models.ticket }],
+    });
 
     res.status(200).send(boards);
   } catch (error) {

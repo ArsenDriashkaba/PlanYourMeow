@@ -1,5 +1,4 @@
 /*________________________ Global styling*/
-
 * {
   margin: 0;
   padding: 0;
@@ -9,5 +8,4 @@
 html,
 body {
   font-size: 62.5%;
-  background-color: rgb(173, 173, 255);
 }

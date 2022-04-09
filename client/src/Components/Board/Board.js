@@ -1,13 +1,13 @@
 import React from "react";
-import Ticket from "../Ticket/Ticket";
+import TicketList from "../Ticket/TicketList/TicketList";
 import "./style.css";
 
-const Board = () => {
+const Board = ({ name, board_id }) => {
   return (
     <div className="board">
       <header className="board-header">
         <div className="board-info">
-          <h2 className="board-name">Test Board Name</h2>
+          <h2 className="board-name">{name}</h2>
           <span className="count-of-tickets">10</span>
         </div>
       </header>
@@ -15,9 +15,7 @@ const Board = () => {
         <input type="text" />
         <button className="add-ticket">+</button>
       </div>
-      <div className="tickets">
-        <Ticket />
-      </div>
+      <TicketList tickets={[]} />
     </div>
   );
 };

@@ -41,6 +41,7 @@ const getWorkspaceById = async (req, res) => {
     if (validationResults.isEmpty()) {
       const workspace = await req.context.models.workspace.findOne({
         where: { id: req.params.id },
+        include: [{ model: req.context.models.board }],
       });
 
       res.status(200).send(workspace);
