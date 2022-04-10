@@ -1,5 +1,7 @@
 import Ticket from "../Ticket";
 
+import "./TicketList.css";
+
 const TicketList = ({ tickets, fetchData }) => {
   return (
     <div className="tickets-list">

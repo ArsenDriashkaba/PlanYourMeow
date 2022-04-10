@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import DeleteElementBtn from "../DeleteElementBtn/DeleteElementBtn";
 
-import "./style.css";
+import "./Ticket.css";
 
 const Ticket = ({ name, ticket_id, fetchData }) => {
   const [error, setError] = useState();
@@ -13,10 +13,10 @@ const Ticket = ({ name, ticket_id, fetchData }) => {
 
   return (
     <div className="ticket">
-      <header className="ticket-header">
-        <h2 className="name">{name}</h2>
-      </header>
-      <div>
+      <div className="ticket-info-container">
+        <header className="ticket-header">
+          <h2 className="ticket-name">{name}</h2>
+        </header>
         <div className="ticket-person"></div>
       </div>
       <DeleteElementBtn

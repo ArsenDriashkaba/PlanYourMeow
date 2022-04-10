@@ -1,4 +1,7 @@
 .board-list {
   width: 95%;
   margin: 0 auto;
+  padding: 0.5rem;
+  display: flex;
+  align-items: flex-start;
 }

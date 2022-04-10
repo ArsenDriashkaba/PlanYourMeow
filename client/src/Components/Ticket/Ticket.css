@@ -1,0 +1,17 @@
+.ticket {
+  margin: auto;
+  width: 28rem;
+  min-height: 5rem;
+  border-radius: 0.4rem;
+  box-shadow: 0rem 0.2rem 0.3rem rgba(0, 0, 0, 0.3);
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(245, 245, 245);
+  margin: 0.5rem;
+}
+
+.ticket-name {
+  font-size: 1.5rem;
+}

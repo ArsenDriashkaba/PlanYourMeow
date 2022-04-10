@@ -52,18 +52,18 @@ const WorkspaceDetailPage = () => {
       <header id="board-list-header">
         <h1>{workspace?.name}</h1>
         <button id="invite-member">Invite</button>
+        <CreateInput
+          elementId={id}
+          fetchData={setFetchedBoards}
+          targetId={"workspaceId"}
+          postUrl={"boards"}
+        />
       </header>
       <hr />
       <BoardList
         boards={filteredBoardsByWorkspace}
         fetchData={setFetchedBoards}
         errorHandler={setError}
-      />
-      <CreateInput
-        elementId={id}
-        fetchData={setFetchedBoards}
-        targetId={"workspaceId"}
-        postUrl={"boards"}
       />
     </section>
   );

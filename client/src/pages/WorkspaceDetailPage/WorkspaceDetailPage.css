@@ -8,3 +8,13 @@
   justify-content: space-evenly;
   align-items: center;
 }
+
+#board-list-header h1 {
+  font-size: 2rem;
+}
+
+#invite-member {
+  width: 8rem;
+  height: 3rem;
+  border-radius: 0.4rem;
+}

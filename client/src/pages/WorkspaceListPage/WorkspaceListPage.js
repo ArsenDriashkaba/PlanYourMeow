@@ -40,7 +40,6 @@ const WorkspaceListPage = () => {
           />
         </div>
         <div className="workspaces-create-container">
-          <h2>Create workspace</h2>
           <CreateInput
             fetchData={setFetchedWorkspaces}
             postUrl={"workspaces"}

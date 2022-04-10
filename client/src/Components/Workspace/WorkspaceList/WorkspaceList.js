@@ -6,8 +6,9 @@ const WorkspaceList = ({ workspaces, fetchData, errorHandler }) => {
     <div className="workspace-list">
       {workspaces.map((workspace) => (
         <WorkspacePreview
+          key={workspace?.id}
           name={workspace?.name}
-          workspace_id={workspace.id}
+          workspace_id={workspace?.id}
           fetchData={fetchData}
           errorHandler={errorHandler}
         />

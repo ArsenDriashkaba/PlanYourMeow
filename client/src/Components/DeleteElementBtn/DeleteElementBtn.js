@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import "./DeleteElementBtn.css";
+
 import api from "../../Api";
 
 const DeleteElementBtn = ({ reqUrl, elementId, fetchData, errorHandler }) => {
@@ -22,7 +24,11 @@ const DeleteElementBtn = ({ reqUrl, elementId, fetchData, errorHandler }) => {
     return <p>Error occured :c</p>;
   }
 
-  return <button onClick={deleteElement}>X</button>;
+  return (
+    <button className="delete-element-btn" onClick={deleteElement}>
+      X
+    </button>
+  );
 };
 
 export default DeleteElementBtn;
