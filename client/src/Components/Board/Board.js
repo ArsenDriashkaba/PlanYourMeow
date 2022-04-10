@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import api from "../../Api";
+
 import TicketList from "../Ticket/TicketList/TicketList";
+import CreateInput from "../CreateInput/CreateInput";
 import "./style.css";
 
-const Board = ({ name, tickets }) => {
+const Board = ({ name, board_id }) => {
+  const [tickets, setTickets] = useState([]);
+  const [error, setError] = useState();
+
+  const setFetchedTickets = () => {
+    api
+      .get(`/tickets`)
+      .then((res) => setTickets(res.data))
+      .catch((error) => setError(error));
+
+    console.log("Tickets are fetched!");
+  };
+
+  useEffect(setFetchedTickets, []);
+
   return (
     <div className="board">
       <header className="board-header">
@@ -11,11 +29,8 @@ const Board = ({ name, tickets }) => {
           <span className="count-of-tickets">10</span>
         </div>
       </header>
-      <div className="create-ticket">
-        <input type="text" />
-        <button className="add-ticket">+</button>
-      </div>
-      <TicketList tickets={tickets} />
+      <CreateInput board_id={board_id} fetchTickets={setFetchedTickets} />
+      {error ? <p>Error occured :c</p> : <TicketList tickets={tickets} />}
     </div>
   );
 };

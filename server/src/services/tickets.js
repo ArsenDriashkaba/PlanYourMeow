@@ -38,12 +38,36 @@ const editTicketById = async (req, res) => {};
 
 const deleteTicketById = async (req, res) => {
   try {
-    const successMsg = `You've succsesfully deleted blog with id: ${req.params.id}`;
+    const validationResults = validationResult(req);
 
-    req.log.info(successMsg);
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const ticketId = req.params.id;
+    const ticket = await req.context.models.ticket.findOne({
+      where: { id: ticketId },
+    });
+
+    if (ticket == null) {
+      const ticketNotFoundMsg = `Ticket with id "${ticketId}" is not found...`;
+
+      res.status(404).send(ticketNotFoundMsg);
+
+      return;
+    }
+
+    await sequelize.models.ticket.destroy({ where: { id: ticketId } });
+
+    const successMsg = `You've succsesfully deleted ticket with id: ${req.params.id}`;
+
+    console.log(successMsg);
     res.status(200).send(successMsg);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };
