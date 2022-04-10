@@ -1,12 +1,10 @@
 import React from "react";
-import "./style.css";
+import "./Nav.css";
 
 const Nav = () => {
   return (
     <nav>
-      <ul>
-        <li>Create workspace</li>
-      </ul>
+      <h1 id="logo">PlanYourMeow</h1>
     </nav>
   );
 };

@@ -1,8 +1,7 @@
 .workspace-list {
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
   color: black;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }

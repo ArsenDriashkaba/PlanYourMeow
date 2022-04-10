@@ -33,19 +33,21 @@ const WorkspaceListPage = () => {
     <section id="all-workspaces-section">
       <header id="workspaces-main-header">
         <div className="workspaces-search-container">
-          <h1>All workspaces</h1>
+          <h2>Find workspaces</h2>
           <SearchInput
             value={searchValue}
             onChange={(event) => setSearchValue(event.target.value)}
           />
         </div>
         <div className="workspaces-create-container">
+          <h2>Create workspace</h2>
           <CreateInput
             fetchData={setFetchedWorkspaces}
             postUrl={"workspaces"}
           />
         </div>
       </header>
+      <hr />
       {isLoading && <p>Page is loading</p>}
       {error && <p>Page error :c</p>}
       <WorkspaceList
