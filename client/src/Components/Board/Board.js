@@ -21,6 +21,10 @@ const Board = ({ name, board_id }) => {
 
   useEffect(setFetchedTickets, []);
 
+  const filteredTicketsByBoard = tickets.filter(
+    (ticket) => ticket?.boardId === board_id
+  );
+
   return (
     <div className="board">
       <header className="board-header">
@@ -29,8 +33,17 @@ const Board = ({ name, board_id }) => {
           <span className="count-of-tickets">10</span>
         </div>
       </header>
-      <CreateInput board_id={board_id} fetchTickets={setFetchedTickets} />
-      {error ? <p>Error occured :c</p> : <TicketList tickets={tickets} />}
+      <CreateInput
+        elementId={board_id}
+        fetchData={setFetchedTickets}
+        targetId={"boardId"}
+        postUrl={"tickets"}
+      />
+      {error ? (
+        <p>Error occured :c</p>
+      ) : (
+        <TicketList tickets={filteredTicketsByBoard} />
+      )}
     </div>
   );
 };

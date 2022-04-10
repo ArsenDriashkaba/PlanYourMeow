@@ -2,42 +2,44 @@ import { useState } from "react";
 
 import api from "../../Api";
 
-const CreateInput = ({ board_id, fetchTickets }) => {
-  const [ticketInfo, setTicketInfo] = useState({});
+const CreateInput = ({ elementId, fetchData, targetId, postUrl }) => {
+  const [elementInfo, setElementInfo] = useState({});
   const [error, setError] = useState();
 
   const inputTextHandler = (event) => {
-    const ticketName = event.target.value;
-    const newTicket = { name: ticketName, boardId: board_id };
+    const elementName = event.target.value;
+    const newElement = { name: elementName };
 
-    setTicketInfo(newTicket);
+    newElement[targetId] = elementId;
+
+    setElementInfo(newElement);
   };
 
   const submitToHandler = (event) => {
     event.preventDefault();
 
-    if (ticketInfo === {} || ticketInfo.name == null) {
+    if (elementInfo === {} || elementInfo.name == null) {
       return;
     }
 
     api
-      .post(`/tickets`, ticketInfo)
+      .post(`/${postUrl}`, elementInfo)
       .then(() => {
-        console.log("Ticket added");
-        fetchTickets();
+        console.log("Element added");
+        fetchData();
       })
       .catch((error) => setError(error))
-      .finally(setTicketInfo({}));
+      .finally(setElementInfo({}));
   };
 
   return (
-    <form className="create-ticket">
+    <form className="create-element">
       <input
         type="text"
-        value={ticketInfo.name ? ticketInfo.name : ""}
+        value={elementInfo.name ? elementInfo.name : ""}
         onChange={inputTextHandler}
       />
-      <button className="add-ticket" type="submit" onClick={submitToHandler}>
+      <button className="add-element" type="submit" onClick={submitToHandler}>
         +
       </button>
       {error && <p>Error occured :c</p>}
