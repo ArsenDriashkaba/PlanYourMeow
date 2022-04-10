@@ -1,10 +1,15 @@
 import Ticket from "../Ticket";
 
-const TicketList = ({ tickets }) => {
+const TicketList = ({ tickets, fetchData }) => {
   return (
     <div className="tickets-list">
       {tickets?.map((ticket) => (
-        <Ticket key={ticket.id} name={ticket?.name} ticket_id={ticket.id} />
+        <Ticket
+          key={ticket.id}
+          name={ticket?.name}
+          ticket_id={ticket.id}
+          fetchData={fetchData}
+        />
       ))}
     </div>
   );

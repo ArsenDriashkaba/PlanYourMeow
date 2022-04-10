@@ -42,7 +42,10 @@ const Board = ({ name, board_id }) => {
       {error ? (
         <p>Error occured :c</p>
       ) : (
-        <TicketList tickets={filteredTicketsByBoard} />
+        <TicketList
+          tickets={filteredTicketsByBoard}
+          fetchData={setFetchedTickets}
+        />
       )}
     </div>
   );
