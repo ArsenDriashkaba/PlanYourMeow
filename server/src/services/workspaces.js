@@ -133,6 +133,19 @@ const deleteWorkspaceById = async (req, res) => {
       return;
     }
 
+    const boardsOfWorkspace = await sequelize.models.board.findAll({
+      where: { workspaceId: workspaceId },
+    });
+
+    boardsOfWorkspace.forEach(async (board) => {
+      await sequelize.models.ticket.destroy({
+        where: { boardId: board.id },
+      });
+    });
+
+    await sequelize.models.board.destroy({
+      where: { workspaceId: req.params.id },
+    });
     await sequelize.models.workspace.destroy({ where: { id: workspaceId } });
 
     const successMsg = `You've succsesfully deleted workspace with id: ${req.params.id}`;
