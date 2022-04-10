@@ -108,6 +108,10 @@ const deleteBoardById = async (req, res) => {
       return;
     }
 
+    await sequelize.models.ticket.destroy({
+      where: { boardId: req.params.id },
+    });
+
     await sequelize.models.board.destroy({ where: { id: boardId } });
 
     const successMsg = `You've succsesfully deleted board with id: ${req.params.id}`;
