@@ -54,7 +54,11 @@ const WorkspaceDetailPage = () => {
         <button id="invite-member">Invite</button>
       </header>
       <hr />
-      <BoardList boards={filteredBoardsByWorkspace} />
+      <BoardList
+        boards={filteredBoardsByWorkspace}
+        fetchData={setFetchedBoards}
+        errorHandler={setError}
+      />
       <CreateInput
         elementId={id}
         fetchData={setFetchedBoards}

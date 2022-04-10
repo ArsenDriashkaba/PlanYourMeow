@@ -4,9 +4,10 @@ import api from "../../Api";
 
 import TicketList from "../Ticket/TicketList/TicketList";
 import CreateInput from "../CreateInput/CreateInput";
-import "./style.css";
+import DeleteElementBtn from "../DeleteElementBtn/DeleteElementBtn";
+import "./Board.css";
 
-const Board = ({ name, board_id }) => {
+const Board = ({ name, board_id, fetchData, errorHandler }) => {
   const [tickets, setTickets] = useState([]);
   const [error, setError] = useState();
 
@@ -32,6 +33,12 @@ const Board = ({ name, board_id }) => {
           <h2 className="board-name">{name}</h2>
           <span className="count-of-tickets">10</span>
         </div>
+        <DeleteElementBtn
+          reqUrl={"boards"}
+          elementId={board_id}
+          fetchData={fetchData}
+          errorHandler={errorHandler}
+        />
       </header>
       <CreateInput
         elementId={board_id}
