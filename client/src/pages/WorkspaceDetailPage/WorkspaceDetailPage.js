@@ -36,7 +36,7 @@ const WorkspaceDetailPage = () => {
   useEffect(setFetchedBoards, []);
 
   const filteredBoardsByWorkspace = boards.filter(
-    (board) => board.workspaceId == id
+    (board) => board.workspaceId === parseInt(id)
   );
 
   if (isLoading) {

@@ -1,21 +1,11 @@
 import { useState } from "react";
 
-import api from "../../Api";
+import DeleteElementBtn from "../DeleteElementBtn/DeleteElementBtn";
 
 import "./style.css";
 
 const Ticket = ({ name, ticket_id, fetchData }) => {
   const [error, setError] = useState();
-
-  const deleteTicket = () => {
-    api
-      .delete(`/tickets/${ticket_id}`)
-      .then((res) => {
-        console.log(res);
-        fetchData();
-      })
-      .catch((error) => setError(error));
-  };
 
   if (error) {
     return <p>Error occured :c</p>;
@@ -29,7 +19,12 @@ const Ticket = ({ name, ticket_id, fetchData }) => {
       <div>
         <div className="ticket-person"></div>
       </div>
-      <button onClick={deleteTicket}>X</button>
+      <DeleteElementBtn
+        elementId={ticket_id}
+        reqUrl={"tickets"}
+        fetchData={fetchData}
+        errorHandler={setError}
+      />
     </div>
   );
 };
