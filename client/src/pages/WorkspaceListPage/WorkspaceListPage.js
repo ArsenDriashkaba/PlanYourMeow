@@ -48,7 +48,11 @@ const WorkspaceListPage = () => {
       </header>
       {isLoading && <p>Page is loading</p>}
       {error && <p>Page error :c</p>}
-      <WorkspaceList workspaces={filteredWorkspaces} />
+      <WorkspaceList
+        workspaces={filteredWorkspaces}
+        fetchData={setFetchedWorkspaces}
+        errorHandler={setError}
+      />
     </section>
   );
 };
