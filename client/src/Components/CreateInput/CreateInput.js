@@ -10,7 +10,9 @@ const CreateInput = ({ elementId, fetchData, targetId, postUrl }) => {
     const elementName = event.target.value;
     const newElement = { name: elementName };
 
-    newElement[targetId] = elementId;
+    if (targetId) {
+      newElement[targetId] = elementId;
+    }
 
     setElementInfo(newElement);
   };

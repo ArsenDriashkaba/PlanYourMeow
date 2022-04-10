@@ -35,6 +35,10 @@ const WorkspaceDetailPage = () => {
 
   useEffect(setFetchedBoards, []);
 
+  const filteredBoardsByWorkspace = boards.filter(
+    (board) => board.workspaceId == id
+  );
+
   if (isLoading) {
     return <p>Is loading</p>;
   }
@@ -50,7 +54,7 @@ const WorkspaceDetailPage = () => {
         <button id="invite-member">Invite</button>
       </header>
       <hr />
-      <BoardList boards={boards} />
+      <BoardList boards={filteredBoardsByWorkspace} />
       <CreateInput
         elementId={id}
         fetchData={setFetchedBoards}
