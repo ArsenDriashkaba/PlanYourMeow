@@ -1,46 +1,33 @@
 import { sanitize, validationResult } from "express-validator";
-import { database } from "../..";
+import sequelize from "../config/database";
 
 const addTicket = async (req, res) => {
   try {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const name = req.body.name;
-      const description = req.body.description;
-      const deadline = req.body.deadline;
-      const boardId = req.body.boardId;
-      const label = req.body.label;
-      const idOfAssignedUser = req.body.idOfAssignedUser;
-      const state = req.body.state;
+      const ticketInfo = req.body;
 
-      database.query(
-        `INSERT INTO users (name, description, deadline, board_id, label, id_of_assigned_user, state) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [name, description, deadline, boardId, label, idOfAssignedUser, state],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.status(200).send(result);
-          }
-        }
-      );
+      const newTicket = await sequelize.models.ticket.create(ticketInfo);
+
+      res.status(200).send(newTicket);
     } else {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
     }
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.status(500).send("Error!");
   }
 };
 
 const getAllTickets = async (req, res) => {
   try {
-    req.log.info("Success");
-    res.status(200).send("Hello");
+    const tickets = await req.context.models.ticket.findAll();
+
+    res.status(200).send(tickets);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };
@@ -51,12 +38,36 @@ const editTicketById = async (req, res) => {};
 
 const deleteTicketById = async (req, res) => {
   try {
-    const successMsg = `You've succsesfully deleted blog with id: ${req.params.id}`;
+    const validationResults = validationResult(req);
 
-    req.log.info(successMsg);
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const ticketId = req.params.id;
+    const ticket = await req.context.models.ticket.findOne({
+      where: { id: ticketId },
+    });
+
+    if (ticket == null) {
+      const ticketNotFoundMsg = `Ticket with id "${ticketId}" is not found...`;
+
+      res.status(404).send(ticketNotFoundMsg);
+
+      return;
+    }
+
+    await sequelize.models.ticket.destroy({ where: { id: ticketId } });
+
+    const successMsg = `You've succsesfully deleted ticket with id: ${req.params.id}`;
+
+    console.log(successMsg);
     res.status(200).send(successMsg);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };

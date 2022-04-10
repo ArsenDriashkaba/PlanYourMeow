@@ -1,0 +1,22 @@
+/*________________________ Global styling*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-size: 62.5%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease-in-out;
+  border-radius: 0.1rem;
+}
+
+button:hover {
+  transform: scale(1.2);
+}

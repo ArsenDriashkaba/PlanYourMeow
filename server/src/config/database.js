@@ -12,12 +12,14 @@ const applyRelations = (sequelize) => {
     sequelize.models;
 
   user.hasMany(ticket);
+  ticket.belongsTo(user);
   workspace.belongsTo(user);
   workspace.hasMany(board);
   board.hasMany(ticket);
-  role.belongsTo(userTeamRole);
-  user.belongsTo(userTeamRole);
-  workspace.belongsTo(userTeamRole);
+  board.belongsTo(workspace);
+  // role.belongsTo(userTeamRole);
+  // user.belongsTo(userTeamRole);
+  // workspace.belongsTo(userTeamRole);
 };
 
 const sequelize = new Sequelize("plan_your_meow_db", "root", "Strila654789", {

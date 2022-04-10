@@ -26,7 +26,9 @@ const addBoard = async (req, res) => {
 
 const getAllBoards = async (req, res) => {
   try {
-    const boards = await req.context.models.board.findAll();
+    const boards = await req.context.models.board.findAll({
+      include: [{ model: req.context.models.ticket }],
+    });
 
     res.status(200).send(boards);
   } catch (error) {
@@ -105,6 +107,10 @@ const deleteBoardById = async (req, res) => {
 
       return;
     }
+
+    await sequelize.models.ticket.destroy({
+      where: { boardId: req.params.id },
+    });
 
     await sequelize.models.board.destroy({ where: { id: boardId } });
 

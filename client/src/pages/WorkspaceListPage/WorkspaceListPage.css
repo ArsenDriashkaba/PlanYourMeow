@@ -1,0 +1,15 @@
+#all-workspaces-section {
+  min-height: 90vh;
+}
+
+#workspaces-main-header {
+  min-height: 8vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#workspaces-main-header h2 {
+  font-size: 1.5rem;
+  text-align: center;
+}

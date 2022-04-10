@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 import sequelize from "./src/config/database";
 import routes from "./src/routes";
 
-const PORT = 3000;
+const PORT = 3001;
 
 export const database = mysql.createConnection({
   user: "root",
@@ -30,6 +30,7 @@ app.use((req, _, next) => {
 app.use("/users", routes.users);
 app.use("/boards", routes.boards);
 app.use("/workspaces", routes.workspaces);
+app.use("/tickets", routes.tickets);
 
 app.all("*", (_, res) => {
   res.status(404);

@@ -35,7 +35,34 @@ const getAllWorkspaces = async (req, res) => {
   }
 };
 
-const getWorkspaceById = async (req, res) => {};
+const getWorkspaceById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const workspaceModel = models.workspace;
+    const boardModel = models.board;
+    const ticketModel = models.ticket;
+
+    if (validationResults.isEmpty()) {
+      const workspace = await workspaceModel.findOne({
+        where: { id: req.params.id },
+        include: [
+          {
+            model: boardModel,
+            include: [{ model: ticketModel }],
+          },
+        ],
+      });
+
+      res.status(200).send(workspace);
+    } else {
+      res.send(400);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
 
 const editWorkspaceById = async (req, res) => {
   try {
@@ -106,6 +133,19 @@ const deleteWorkspaceById = async (req, res) => {
       return;
     }
 
+    const boardsOfWorkspace = await sequelize.models.board.findAll({
+      where: { workspaceId: workspaceId },
+    });
+
+    boardsOfWorkspace.forEach(async (board) => {
+      await sequelize.models.ticket.destroy({
+        where: { boardId: board.id },
+      });
+    });
+
+    await sequelize.models.board.destroy({
+      where: { workspaceId: req.params.id },
+    });
     await sequelize.models.workspace.destroy({ where: { id: workspaceId } });
 
     const successMsg = `You've succsesfully deleted workspace with id: ${req.params.id}`;

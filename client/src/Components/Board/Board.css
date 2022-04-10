@@ -1,0 +1,45 @@
+:root {
+  --border-radius: 0.5rem;
+  --button-scale: 3.5rem;
+}
+
+.board {
+  width: 30rem;
+  min-height: 20vh;
+  border-radius: var(--border-radius);
+  background-color: white;
+  margin: 0 1rem;
+  box-shadow: 0rem 0.3rem 0.4rem rgba(0, 0, 0, 0.25);
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: var(--border-radius);
+  border-top-left-radius: var(--border-radius);
+  background-color: rgb(235, 235, 235);
+  height: 3.5rem;
+}
+
+.board-info {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-name {
+  font-size: 1.5rem;
+}
+
+.create-ticket-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-ticket {
+  background-color: white;
+}
