@@ -32,9 +32,73 @@ const getAllTickets = async (req, res) => {
   }
 };
 
-const getTicketById = async (req, res) => {};
+const getTicketById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const ticketModel = models.ticket;
 
-const editTicketById = async (req, res) => {};
+    if (validationResults.isEmpty()) {
+      const ticket = await ticketModel.findOne({
+        where: { id: req.params.id },
+      });
+
+      if (ticket == null) {
+        const ticketNotFoundMsg = `Ticket with id "${req.params.id}" is not found...`;
+
+        res.status(404).send(ticketNotFoundMsg);
+
+        return;
+      }
+
+      res.status(200).send(ticket);
+    } else {
+      res.send(400);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const editTicketById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const ticketId = req.params.id;
+    const ticket = await req.context.models.ticket.findOne({
+      where: { id: ticketId },
+    });
+
+    if (ticket == null) {
+      const ticketNotFoundMessage = `Ticket with id "${ticketId}" is not found...`;
+
+      console.log(ticketNotFoundMessage);
+      res.status(404).send(ticketNotFoundMessage);
+
+      return;
+    }
+
+    const ticketModel = await sequelize.models.ticket;
+
+    await ticketModel.update(req.body, { where: { id: ticketId } });
+
+    const successMsg = `You've succsesfully updated ticket with id: ${req.params.id}`;
+
+    console.log(successMsg);
+    res.status(200).send(successMsg);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
 
 const deleteTicketById = async (req, res) => {
   try {

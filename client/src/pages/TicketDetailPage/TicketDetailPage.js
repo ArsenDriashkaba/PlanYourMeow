@@ -39,6 +39,8 @@ const TicketDetailPage = () => {
     ...ticketInfo,
   };
 
+  console.log(name, description);
+
   return (
     <section id="ticket-detail-page">
       <header id="ticket-page-header">
