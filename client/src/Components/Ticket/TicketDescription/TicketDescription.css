@@ -1,0 +1,9 @@
+#ticket-description {
+  font-size: 1.5rem;
+  min-width: 65%;
+  padding: 1rem;
+}
+
+.description-text-area {
+  width: 100%;
+}

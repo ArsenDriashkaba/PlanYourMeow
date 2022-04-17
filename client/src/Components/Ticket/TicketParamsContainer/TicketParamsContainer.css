@@ -1,0 +1,11 @@
+#ticket-params-container {
+  min-height: 80vh;
+  min-width: 35%;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  position: sticky;
+  padding: 1rem;
+  top: 0;
+}

@@ -1,0 +1,10 @@
+#ticket-detail-page {
+  min-height: 90vh;
+}
+
+.ticket-detail-body {
+  display: flex;
+  width: 90%;
+  margin: auto;
+  justify-content: space-between;
+}
