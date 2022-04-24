@@ -13,6 +13,7 @@ const WorkspaceDetailPage = () => {
   const [boards, setBoards] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [isChange, setIsChange] = useState(false);
 
   const setFetchedBoards = () => {
     api
@@ -64,6 +65,8 @@ const WorkspaceDetailPage = () => {
         boards={filteredBoardsByWorkspace}
         fetchData={setFetchedBoards}
         errorHandler={setError}
+        isChange={isChange}
+        setIsChange={setIsChange}
       />
     </section>
   );

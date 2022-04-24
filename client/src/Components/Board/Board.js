@@ -7,8 +7,15 @@ import CreateInput from "../CreateInput/CreateInput";
 import DeleteElementBtn from "../DeleteElementBtn/DeleteElementBtn";
 import "./Board.css";
 
-const Board = ({ name, board_id, fetchData, errorHandler }) => {
-  const [tickets, setTickets] = useState([]);
+const Board = ({
+  name,
+  board_id,
+  fetchData,
+  errorHandler,
+  boardTickets,
+  isChange,
+}) => {
+  const [tickets, setTickets] = useState(boardTickets);
   const [error, setError] = useState();
 
   const setFetchedTickets = () => {
@@ -20,7 +27,7 @@ const Board = ({ name, board_id, fetchData, errorHandler }) => {
     console.log("Tickets are fetched!");
   };
 
-  useEffect(setFetchedTickets, []);
+  useEffect(setFetchedTickets, [isChange]);
 
   const filteredTicketsByBoard = tickets.filter(
     (ticket) => ticket?.boardId === board_id
@@ -52,6 +59,7 @@ const Board = ({ name, board_id, fetchData, errorHandler }) => {
         <TicketList
           tickets={filteredTicketsByBoard}
           fetchData={setFetchedTickets}
+          boardId={board_id}
         />
       )}
     </div>
