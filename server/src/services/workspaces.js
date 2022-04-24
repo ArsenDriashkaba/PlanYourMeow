@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator";
 import sequelize from "../config/database";
+import userTeamRole from "../models/userTeamRole";
 
 const addWorkspace = async (req, res) => {
   try {

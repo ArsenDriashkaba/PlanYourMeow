@@ -1,9 +1,12 @@
 #board-list-section {
+  width: 100%;
   min-height: 90vh;
+  overflow-x: scroll;
 }
 
 #board-list-header {
   min-height: 8vh;
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

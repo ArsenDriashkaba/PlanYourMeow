@@ -13,6 +13,7 @@ const WorkspaceDetailPage = () => {
   const [boards, setBoards] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const [isChange, setIsChange] = useState(false);
 
   const setFetchedBoards = () => {
     api
@@ -51,7 +52,6 @@ const WorkspaceDetailPage = () => {
     <section id="board-list-section">
       <header id="board-list-header">
         <h1>{workspace?.name}</h1>
-        <button id="invite-member">Invite</button>
         <CreateInput
           elementId={id}
           fetchData={setFetchedBoards}
@@ -64,6 +64,8 @@ const WorkspaceDetailPage = () => {
         boards={filteredBoardsByWorkspace}
         fetchData={setFetchedBoards}
         errorHandler={setError}
+        isChange={isChange}
+        setIsChange={setIsChange}
       />
     </section>
   );
