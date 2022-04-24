@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 
 import api from "../../../Api";
@@ -13,17 +13,17 @@ const BoardList = ({
   isChange,
   setIsChange,
 }) => {
-  const [dnd, setDnd] = useState(false);
+  const handleDND = ({ destination, draggableId }) => {
+    if (!destination) {
+      return;
+    }
 
-  const handleDND = (dndEvent) => {
-    console.log(dndEvent);
-    const boardId = dndEvent.destination.droppableId;
-    const ticketId = dndEvent.draggableId;
+    const boardId = destination.droppableId;
+    const ticketId = draggableId;
 
     api
       .patch(`/tickets/${ticketId}`, { boardId: boardId })
-      .then((res) => {
-        setDnd(true);
+      .then(() => {
         setIsChange(!isChange);
       })
       .catch((error) => console.log(error));
@@ -40,8 +40,6 @@ const BoardList = ({
             boardTickets={board?.tickets}
             fetchData={fetchData}
             errorHandler={errorHandler}
-            dnd={dnd}
-            setDnd={dnd}
             isChange={isChange}
             setIsChange={setIsChange}
           />

@@ -52,7 +52,6 @@ const WorkspaceDetailPage = () => {
     <section id="board-list-section">
       <header id="board-list-header">
         <h1>{workspace?.name}</h1>
-        <button id="invite-member">Invite</button>
         <CreateInput
           elementId={id}
           fetchData={setFetchedBoards}
