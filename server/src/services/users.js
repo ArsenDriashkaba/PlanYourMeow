@@ -1,18 +1,38 @@
 import { validationResult } from "express-validator";
 import sequelize from "../config/database";
+import validateRegister from "./helpers/registerValidation";
+import validateLogin from "./helpers/loginValidation";
+import bcrypt from "bcryptjs";
+import jsonwebtoken from "jsonwebtoken";
 
 const addUser = async (req, res) => {
   try {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
+      const { error } = validateRegister(req);
+
+      if (error) {
+        res.status(400).send(error.details[0].message);
+      }
+
       const { firstName, secondName, email, password } = { ...req.body };
+      const userModel = req.context.models.user;
+
+      const emailExist = await userModel.findOne({ where: { email: email } });
+
+      if (emailExist) {
+        res.status(400).send(`User with email ${email} is already exist`);
+      }
+
+      const hashSalt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, hashSalt);
 
       const newUser = await sequelize.models.user.create({
         first_name: firstName,
         second_name: secondName,
         email: email,
-        password: password,
+        password: hashedPassword,
       });
 
       res.status(200).send(newUser);
@@ -20,6 +40,43 @@ const addUser = async (req, res) => {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error!");
+  }
+};
+
+const loginHandler = async (req, res) => {
+  try {
+    const { error } = validateLogin(req);
+
+    if (error) {
+      res.status(400).send(error.details[0].message);
+    }
+
+    const userModel = req.context.models.user;
+
+    const user = await userModel.findOne({
+      where: { email: req.body.email },
+    });
+
+    if (!user) {
+      res.status(400).send(`User with email ${email} isn't exist`);
+    }
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!validPassword) {
+      res.status(400).send("Incorrect credentials. Try again :)");
+    }
+
+    const token = jsonwebtoken.sign({ id: user.id }, "planYourMeowSecretToken");
+
+    res.header("authToken", token);
+    res.status(200).send(user);
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
@@ -145,4 +202,10 @@ const editUserDataById = async (req, res) => {
   }
 };
 
-export default { deleteUserById, getAllUsers, addUser, editUserDataById };
+export default {
+  deleteUserById,
+  getAllUsers,
+  addUser,
+  editUserDataById,
+  loginHandler,
+};
