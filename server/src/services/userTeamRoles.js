@@ -6,53 +6,129 @@ const addRoleToUserInTeam = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const userId = req.body.userId;
-      const workspaceId = req.body.workspaceId;
-      const roleId = req.body.roleId;
+      const { workspaceId, roleId, userId } = { ...req.body };
 
-      database.query(
-        `INSERT INTO users (user_id, workspace_id, role_id) VALUES (?, ?, ?)`,
-        [userId, workspaceId, roleId],
-        (err, result) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.status(200).send(result);
-          }
-        }
-      );
+      const newUserTeamRole = await sequelize.models.userTeamRole.create({
+        user_id: userId,
+        workspace_id: workspaceId,
+        role_id: roleId,
+      });
+
+      res.status(200).send(newUserTeamRole);
     } else {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
     }
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.status(500).send("Error!");
   }
 };
 
 const getAllUserTeamRoles = async (req, res) => {
   try {
-    req.log.info("Success");
-    res.status(200).send("Hello");
+    const userTeamRoles = await req.context.models.userTeamRole.findAll();
+
+    res.status(200).send(userTeamRoles);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };
 
-const getUserTeamRoleById = async (req, res) => {};
+const getUserTeamRoleById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const userTeamRoleModel = models.userTeamRole;
 
-const editUserTeamRoleById = async (req, res) => {};
+    if (validationResults.isEmpty()) {
+      const userTeamRole = await userTeamRoleModel.findOne({
+        where: { id: req.params.id },
+      });
+
+      res.status(200).send(userTeamRole);
+    } else {
+      res.send(400);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const editUserTeamRoleById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const userTeamRoleModel = await sequelize.models.userTeamRole;
+    const userTeamRoleID = req.params.id;
+    const userTeamRole = await userTeamRoleModel.findOne({
+      where: { id: userTeamRoleID },
+    });
+
+    if (userTeamRole == null) {
+      const notFoundMsg = `UserTeamRole with id "${userTeamRoleID}" is not found...`;
+
+      console.log(notFoundMsg);
+      res.status(404).send(notFoundMsg);
+
+      return;
+    }
+
+    await userTeamRoleModel.update(req.body, { where: { id: userTeamRoleID } });
+
+    const successMsg = `You've succsesfully updated userTeamRole with id: ${req.params.id}`;
+
+    console.log(successMsg);
+    res.status(200).send(successMsg);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
 
 const deleteUserTeamRoleById = async (req, res) => {
   try {
-    const successMsg = `You've succsesfully deleted blog with id: ${req.params.id}`;
+    const validationResults = validationResult(req);
 
-    req.log.info(successMsg);
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const userTEamRoleId = req.params.id;
+    const userTeamRole = await req.context.models.userTeamRole.findOne({
+      where: { id: userTEamRoleId },
+    });
+
+    if (userTeamRole == null) {
+      const notFoundMsg = `UserTeamRole with id "${userTEamRoleId}" is not found...`;
+
+      res.status(404).send(notFoundMsg);
+
+      return;
+    }
+
+    await sequelize.models.userTeamRole.destroy({
+      where: { id: userTEamRoleId },
+    });
+
+    const successMsg = `You've succsesfully deleted userTeamRole with id: ${req.params.id}`;
+
+    console.log(successMsg);
     res.status(200).send(successMsg);
   } catch (error) {
-    req.log.error(error);
+    console.log(error);
     res.sendStatus(500);
   }
 };

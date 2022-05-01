@@ -1,0 +1,11 @@
+#register-container {
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  background-color: azure;
+}
+
+#register-container * {
+  margin: 0.1rem;
+}

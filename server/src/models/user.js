@@ -33,6 +33,7 @@ const user = (sequelize) => {
       validate: {
         notEmpty: true,
       },
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
