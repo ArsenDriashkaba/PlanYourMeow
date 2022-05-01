@@ -23,6 +23,7 @@ const addUser = async (req, res) => {
 
       if (emailExist) {
         res.status(400).send(`User with email ${email} is already exist`);
+        return;
       }
 
       const hashSalt = await bcrypt.genSalt(10);
@@ -62,6 +63,7 @@ const loginHandler = async (req, res) => {
 
     if (!user) {
       res.status(400).send(`User with email ${email} isn't exist`);
+      return;
     }
 
     const validPassword = await bcrypt.compare(
@@ -71,12 +73,15 @@ const loginHandler = async (req, res) => {
 
     if (!validPassword) {
       res.status(400).send("Incorrect credentials. Try again :)");
+      return;
     }
 
     const token = jsonwebtoken.sign({ id: user.id }, "planYourMeowSecretToken");
 
+    // req.session.user = user;
+
     res.header("authToken", token);
-    res.status(200).send(user);
+    res.status(200).send(user.id);
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");

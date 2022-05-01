@@ -2,6 +2,8 @@ import express from "express";
 import mysql from "mysql";
 import cors from "cors";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 import sequelize from "./src/config/database";
 import routes from "./src/routes";
@@ -17,8 +19,29 @@ export const database = mysql.createConnection({
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["GET", "POST", "DELETE", "PATCH"],
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    key: "userId",
+    secret: "subscribe",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 12,
+    },
+  })
+);
 
 app.use((req, _, next) => {
   req.context = {
