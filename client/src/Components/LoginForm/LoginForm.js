@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import api from "../../Api";
@@ -8,19 +8,36 @@ import "./LoginForm.css";
 const LoginForm = () => {
   const [loginInfo, setLoginInfo] = useState({});
   const [error, setError] = useState();
+  const [loginStatus, setLoginStatus] = useState();
+  const [userToken, setUserToken] = useState("");
+  const [loginReqState, setLoginReqState] = useState({});
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    api
+    await api
       .post("/users/login", loginInfo)
       .then((res) => {
-        setLoginInfo(res.data);
-        console.log(loginInfo);
+        setLoginReqState(res.data);
+        setUserToken(res.data.token);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.id);
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error))
+      .finally(() => {
+        if (loginReqState.auth) {
+          getAuthInfo();
+        }
+      });
+  };
+
+  const getAuthInfo = () => {
+    api.get("/users/login").then((res) => {
+      setLoginStatus(res?.data.loggedIn);
+      console.log(res);
+    });
   };
 
   const handleEmailChange = (event) =>
@@ -29,8 +46,15 @@ const LoginForm = () => {
   const handlePasswordChange = (event) =>
     setLoginInfo({ ...loginInfo, password: event.target.value });
 
+  useEffect(getAuthInfo, []);
+
+  if (error) {
+    return <p>Page error :c</p>;
+  }
+
   return (
     <form onSubmit={handleSubmit} id="login-form">
+      <h2>{loginStatus}</h2>
       <label>Email : </label>
       <input
         type="text"

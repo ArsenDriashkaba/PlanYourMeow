@@ -17,7 +17,9 @@ const WorkspaceListPage = () => {
     setLoading(true);
 
     api
-      .get("/workspaces")
+      .get("/workspaces", {
+        headers: { "auth-token": localStorage.getItem("token") },
+      })
       .then((res) => setWorkspaces(res.data))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));

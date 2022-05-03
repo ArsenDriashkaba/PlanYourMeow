@@ -1,5 +1,5 @@
 import express from "express";
-import { param, body } from "express-validator";
+import verifyAuth from "../services/helpers/verifyToken";
 
 import services from "../services";
 
@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/", services.workspaces.addWorkspace);
 
-router.get("/", services.workspaces.getAllWorkspaces);
+router.get("/", verifyAuth, services.workspaces.getAllWorkspaces);
 
 router.get("/:id", services.workspaces.getWorkspaceById);
 

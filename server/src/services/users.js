@@ -76,17 +76,35 @@ const loginHandler = async (req, res) => {
       return;
     }
 
-    const token = jsonwebtoken.sign({ id: user.id }, "planYourMeowSecretToken");
+    const token = jsonwebtoken.sign(
+      { id: user.id },
+      "planYourMeowSecretToken",
+      {
+        expiresIn: 300,
+      }
+    );
 
-    // req.session.user = user;
+    req.session.user = user;
 
     res.header("authToken", token);
-    res.status(200).send(user.id);
+    res.status(200).send({ auth: true, id: user.id, token: token });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
   }
 };
+
+const getLoginStatus = async (req, res) => {
+  if (req.session.user) {
+    res.status(200).send({ loggedIn: true, user: req.session.user });
+
+    return;
+  }
+
+  res.status(200).send({ loggedIn: false });
+};
+
+const getAuthInfo = async (req, res) => {};
 
 const getAllUsers = async (req, res) => {
   try {
@@ -213,4 +231,6 @@ export default {
   addUser,
   editUserDataById,
   loginHandler,
+  getLoginStatus,
+  getAuthInfo,
 };
