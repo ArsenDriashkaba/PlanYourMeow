@@ -18,9 +18,11 @@ const RegistrationForm = () => {
 
     api
       .post("/users/", registerInfo)
-      .then((res) => setRegResult(res.data))
-      .catch((error) => setError(error))
-      .finally(() => navigate("/workspaces"));
+      .then((res) => {
+        setRegResult(res.data);
+        navigate("/login");
+      })
+      .catch((error) => setError(error));
   };
 
   const handleNameChange = (event) =>

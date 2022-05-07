@@ -11,7 +11,7 @@ const Nav = () => {
 
   const handleLogOut = () => {
     userCtx.userLogOut();
-    navigate("/");
+    navigate("/login");
   };
 
   return (

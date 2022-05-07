@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router";
-import RegistrationForm from "../../Components/RegistrationForm/RegistrationForm";
+import LoginForm from "../../Components/LoginForm/LoginForm";
 
 import userContext from "../../context/userContext";
 
-import "./MainPage.css";
+import "./LoginPage.css";
 
-const MainPage = () => {
+const LoginPage = () => {
   const userCtx = useContext(userContext);
   const navigate = useNavigate();
 
@@ -15,10 +15,10 @@ const MainPage = () => {
   }
 
   return (
-    <div className="main-page">
-      <RegistrationForm />
+    <div className="login-page">
+      <LoginForm />
     </div>
   );
 };
 
-export default MainPage;
+export default LoginPage;
