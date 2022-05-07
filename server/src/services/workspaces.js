@@ -6,11 +6,39 @@ const addWorkspace = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const { name, userId } = { ...req.body };
+      const { name } = { ...req.body };
+      const idOfUser = req.params.userId;
+      const idOfRole = req.params.roleId;
+      const userWorkspaceAsoc = req.context.models.userWorkspace;
+      const userRoleAsoc = req.context.models.userRole;
+      const workspaceUserRoleAsoc = req.context.models.workspaceUserRole;
 
+      // New workspace creating
       const newWorkspace = await sequelize.models.workspace.create({
         name: name,
-        userId: userId,
+      });
+
+      // adding user to the workspace
+      await userWorkspaceAsoc.create({
+        userId: idOfUser,
+        workspaceId: newWorkspace.id,
+      });
+
+      // giving user role
+      const userRoleForWorkspace = await userRoleAsoc.findOne({
+        where: { userId: idOfUser, roleId: idOfRole },
+      });
+
+      if (!userRoleForWorkspace) {
+        await userRoleAsoc.create({
+          userId: idOfUser,
+          roleId: idOfRole,
+        });
+      }
+
+      await workspaceUserRoleAsoc.create({
+        workspaceId: newWorkspace.id,
+        userRoleId: userRoleForWorkspace.id,
       });
 
       res.status(200).send(newWorkspace);
@@ -26,7 +54,24 @@ const addWorkspace = async (req, res) => {
 
 const getAllWorkspaces = async (req, res) => {
   try {
-    const workspaces = await req.context.models.workspace.findAll();
+    const workspaces = await req.context.models.workspace.findAll({
+      include: [sequelize.models.user],
+    });
+
+    res.status(200).send(workspaces);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const getAllUserWorkspaces = async (req, res) => {
+  try {
+    const user = await req.context.models.user.findOne({
+      where: { id: req.params.id },
+      include: [{ model: req.context.models.workspace }],
+    });
+    const workspaces = user.workspaces;
 
     res.status(200).send(workspaces);
   } catch (error) {
@@ -111,6 +156,8 @@ const editWorkspaceById = async (req, res) => {
 const deleteWorkspaceById = async (req, res) => {
   try {
     const validationResults = validationResult(req);
+    const userWorkspaceAsoc = req.context.models.userWorkspace;
+    const workspaceUserRoleAsoc = req.context.models.workspaceUserRole;
 
     if (!validationResults.isEmpty()) {
       console.log(validationResults);
@@ -146,7 +193,18 @@ const deleteWorkspaceById = async (req, res) => {
     await sequelize.models.board.destroy({
       where: { workspaceId: req.params.id },
     });
+
     await sequelize.models.workspace.destroy({ where: { id: workspaceId } });
+
+    // Deleting user-workspace association
+    await userWorkspaceAsoc.destroy({
+      where: { workspaceId: workspaceId },
+    });
+
+    // Deleting workspace-role-user association
+    await workspaceUserRoleAsoc.destroy({
+      where: { workspaceId: workspaceId },
+    });
 
     const successMsg = `You've succsesfully deleted workspace with id: ${req.params.id}`;
 
@@ -161,6 +219,7 @@ const deleteWorkspaceById = async (req, res) => {
 export default {
   addWorkspace,
   getAllWorkspaces,
+  getAllUserWorkspaces,
   getWorkspaceById,
   editWorkspaceById,
   deleteWorkspaceById,

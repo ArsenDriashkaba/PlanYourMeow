@@ -9,7 +9,9 @@ const DeleteElementBtn = ({ reqUrl, elementId, fetchData, errorHandler }) => {
 
   const deleteElement = () => {
     api
-      .delete(`/${reqUrl}/${elementId}`)
+      .delete(`/${reqUrl}/${elementId}`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => {
         console.log(res);
         fetchData();

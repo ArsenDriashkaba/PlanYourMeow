@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+
+import userContext from "../../context/userContext";
 
 import api from "../../Api";
 import "./WorkspaceListPage.css";
@@ -12,24 +14,33 @@ const WorkspaceListPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [searchValue, setSearchValue] = useState("");
+  const [userId, setUserId] = useState();
+  const userCtx = useContext(userContext);
 
   const setFetchedWorkspaces = () => {
     setLoading(true);
 
-    api
-      .get("/workspaces", {
-        headers: { "auth-token": localStorage.getItem("id_token") },
-      })
-      .then((res) => setWorkspaces(res.data))
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
+    if (userCtx.userId) {
+      setUserId(userCtx.userId);
+
+      api
+        .get(`/workspaces/user/${userCtx.userId}`, {
+          headers: { "auth-token": localStorage.getItem("id_token") },
+        })
+        .then((res) => {
+          setWorkspaces(res.data);
+          console.log(res.data);
+        })
+        .catch((error) => setError(error))
+        .finally(() => setLoading(false));
+    }
   };
 
   const filteredWorkspaces = workspaces.filter((workspace) =>
     workspace?.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  useEffect(setFetchedWorkspaces, []);
+  useEffect(setFetchedWorkspaces, [userCtx.userId]);
 
   return (
     <section id="all-workspaces-section">
@@ -44,7 +55,7 @@ const WorkspaceListPage = () => {
         <div className="workspaces-create-container">
           <CreateInput
             fetchData={setFetchedWorkspaces}
-            postUrl={"workspaces"}
+            postUrl={`workspaces/${userId}/1`}
           />
         </div>
       </header>

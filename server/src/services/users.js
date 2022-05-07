@@ -114,7 +114,9 @@ const getAuthInfo = async (req, res) => {};
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await req.context.models.user.findAll();
+    const users = await req.context.models.user.findAll({
+      include: [sequelize.models.workspace],
+    });
 
     res.status(200).send(users);
   } catch (error) {

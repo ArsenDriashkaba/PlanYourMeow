@@ -8,7 +8,7 @@ const CreateInput = ({ elementId, fetchData, targetId, postUrl }) => {
   const [elementInfo, setElementInfo] = useState({});
   const [error, setError] = useState();
 
-  const placeholder = postUrl.substr(0, postUrl.length - 1);
+  const placeholder = postUrl.substr(0, postUrl.indexOf("/") - 1);
 
   const inputTextHandler = (event) => {
     const elementName = event.target.value;
@@ -29,7 +29,9 @@ const CreateInput = ({ elementId, fetchData, targetId, postUrl }) => {
     }
 
     api
-      .post(`/${postUrl}`, elementInfo)
+      .post(`/${postUrl}`, elementInfo, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then(() => {
         console.log("Element added");
         fetchData();

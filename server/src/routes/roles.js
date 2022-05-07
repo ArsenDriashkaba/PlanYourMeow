@@ -1,11 +1,10 @@
 import express from "express";
-import { param, body } from "express-validator";
 
 import services from "../services";
 
 const router = express.Router();
 
-router.post("/addRole", services.roles.addRole);
+router.post("/", services.roles.addRole);
 
 router.get("/", services.roles.getAllRoles);
 
