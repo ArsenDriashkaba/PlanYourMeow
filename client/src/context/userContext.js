@@ -28,7 +28,7 @@ export const UserContextProvider = (props) => {
     setToken(response.token);
     setUser({
       userId: response.id,
-      username: response.username,
+      username: response.firstName,
     });
 
     localStorage.setItem("id_token", response.token);

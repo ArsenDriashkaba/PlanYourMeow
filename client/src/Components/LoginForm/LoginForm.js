@@ -24,7 +24,10 @@ const LoginForm = () => {
           navigate("/workspaces");
         }
       })
-      .catch((error) => setError(error));
+      .catch((error) => {
+        setError(error);
+        navigate("/");
+      });
   };
 
   const handleEmailChange = (event) =>
@@ -33,12 +36,9 @@ const LoginForm = () => {
   const handlePasswordChange = (event) =>
     setLoginInfo({ ...loginInfo, password: event.target.value });
 
-  if (error) {
-    return <p>Page error :c</p>;
-  }
-
   return (
     <form onSubmit={handleSubmit} id="login-form">
+      <span>{error?.message}</span>
       <h2>Sandwich boi</h2>
       <label>Email : </label>
       <input

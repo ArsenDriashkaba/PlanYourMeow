@@ -87,7 +87,13 @@ const loginHandler = async (req, res) => {
     req.session.user = user;
 
     res.header("authToken", token);
-    res.status(200).send({ auth: true, id: user.id, token: token });
+    res.status(200).send({
+      auth: true,
+      id: user.id,
+      firstName: user.first_name,
+      secondName: user.second_name,
+      token: token,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
