@@ -1,5 +1,4 @@
 import { validationResult } from "express-validator";
-import { database } from "../..";
 
 const addRoleToUserInTeam = async (req, res) => {
   try {
@@ -22,6 +21,40 @@ const addRoleToUserInTeam = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
+  }
+};
+
+const getUserWorkspaceRole = async (req, res) => {
+  //TODO:
+  try {
+    const userWorkspaceRoles =
+      await req.context.models.workspaceUserRole.findAll({
+        where: {
+          workspaceId: req.params.workspaceId,
+        },
+      });
+
+    const userRoles = userWorkspaceRoles.map(async (element) => {
+      const userRole = await req.context.models.userRole.findOne({
+        where: { id: element.userRoleId },
+      });
+
+      return userRole;
+    });
+
+    const userRoleIdx = userRoles.filter((elem) => {
+      console.log("------->", elem);
+      elem.userId.toString() == req.params.userId.toString();
+    });
+
+    const role = await req.context.models.role.findOne({
+      where: { id: userRolesFiltered[0].roleId },
+    });
+
+    res.status(200).send(userWorkspaceRoles);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 
@@ -139,4 +172,5 @@ export default {
   getAllUserTeamRoleByWorkspaceId,
   editUserTeamRoleById,
   deleteUserTeamRoleById,
+  getUserWorkspaceRole,
 };

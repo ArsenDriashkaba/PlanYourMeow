@@ -9,6 +9,11 @@ router.post("/addRoleToUserInTeam", services.userTeamRoles.addRoleToUserInTeam);
 
 router.get("/", services.userTeamRoles.getAllUserTeamRoles);
 
+router.get(
+  "/:userId/:workspaceId",
+  services.userTeamRoles.getUserWorkspaceRole
+);
+
 router.get("/:id", services.userTeamRoles.getAllUserTeamRoleByWorkspaceId);
 
 router.patch("/:id", services.userTeamRoles.editUserTeamRoleById);

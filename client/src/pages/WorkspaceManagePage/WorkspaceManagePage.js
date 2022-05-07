@@ -18,7 +18,9 @@ const WorkspaceManagePage = () => {
     setLoading(true);
 
     api
-      .get(`/workspaces/${id}`)
+      .get(`/workspaces/${id}`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setWorkspaceInfo(res.data))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
@@ -30,7 +32,9 @@ const WorkspaceManagePage = () => {
     setLoading(true);
 
     api
-      .get(`/userTeamRoles/${id}`)
+      .get(`/userTeamRoles/${id}`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setUsersAndRoles(res.data))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));

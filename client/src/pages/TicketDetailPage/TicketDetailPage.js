@@ -20,7 +20,9 @@ const TicketDetailPage = () => {
     setLoading(true);
 
     api
-      .get(`/tickets/${id}`)
+      .get(`/tickets/${id}`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setTicketInfo(res.data))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
@@ -30,7 +32,9 @@ const TicketDetailPage = () => {
 
   const updateTicketInfo = () => {
     api
-      .patch(`/tickets/${id}`, newTicketParams)
+      .patch(`/tickets/${id}`, newTicketParams, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then(() => {
         setFetchedTicketInfo();
         console.log("Ticket is updated :)");

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+
+import userContext from "../../context/userContext";
 
 import api from "../../Api";
 import "./WorkspaceDetailPage.css";
@@ -8,16 +10,21 @@ import BoardList from "../../Components/Board/BoardList/BoardList";
 import CreateInput from "../../Components/CreateInput/CreateInput";
 
 const WorkspaceDetailPage = () => {
+  const userCtx = useContext(userContext);
+
   const { id } = useParams();
   const [workspace, setWorkspace] = useState([]);
   const [boards, setBoards] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [isChange, setIsChange] = useState(false);
+  const [userRole, setUserRole] = useState();
 
   const setFetchedBoards = () => {
     api
-      .get(`/boards`)
+      .get(`/boards`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setBoards(res.data))
       .catch((error) => setError(error));
 
@@ -37,6 +44,19 @@ const WorkspaceDetailPage = () => {
   }, [id]);
 
   useEffect(setFetchedBoards, []);
+
+  //TODO:
+  // useEffect(() => {
+  //   if (userCtx.userId) {
+  //     api
+  //       .get(`/userTeamRoles/${userCtx.userId}/${id}`)
+  //       .then((res) => {
+  //         setUserRole(res.data);
+  //         console.log(res.data);
+  //       })
+  //       .catch((error) => setError(error));
+  //   }
+  // }, [id, userCtx.userId]);
 
   const filteredBoardsByWorkspace = boards.filter(
     (board) => board.workspaceId === parseInt(id)

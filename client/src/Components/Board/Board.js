@@ -20,7 +20,9 @@ const Board = ({
 
   const setFetchedTickets = () => {
     api
-      .get(`/tickets`)
+      .get(`/tickets`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setTickets(res.data))
       .catch((error) => setError(error));
 

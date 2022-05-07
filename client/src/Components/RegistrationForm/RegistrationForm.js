@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import api from "../../Api";
 
@@ -101,10 +102,10 @@ const RegistrationForm = () => {
         </button>
       </div>
 
-      <div className="container signin">
-        <p>
-          Already have an account? <span>Sign in</span>.
-        </p>
+      <div className="sign-in">
+        <h3>
+          Already have an account? <Link to={"/login"}>Sign in</Link>.
+        </h3>
       </div>
     </form>
   );

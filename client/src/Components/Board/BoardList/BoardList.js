@@ -22,7 +22,13 @@ const BoardList = ({
     const ticketId = draggableId;
 
     api
-      .patch(`/tickets/${ticketId}`, { boardId: boardId })
+      .patch(
+        `/tickets/${ticketId}`,
+        { boardId: boardId },
+        {
+          headers: { "auth-token": localStorage.getItem("id_token") },
+        }
+      )
       .then(() => {
         setIsChange(!isChange);
       })
