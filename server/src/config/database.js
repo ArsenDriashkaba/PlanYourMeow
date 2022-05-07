@@ -19,7 +19,6 @@ const applyRelations = (sequelize) => {
   board.belongsTo(workspace);
   // role.belongsTo(userTeamRole);
   // user.belongsTo(userTeamRole);
-  // workspace.belongsTo(userTeamRole);
 };
 
 const sequelize = new Sequelize("plan_your_meow_db", "root", "Strila654789", {

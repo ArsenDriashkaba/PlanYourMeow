@@ -36,18 +36,18 @@ const getAllUserTeamRoles = async (req, res) => {
   }
 };
 
-const getUserTeamRoleById = async (req, res) => {
+const getAllUserTeamRoleByWorkspaceId = async (req, res) => {
   try {
     const validationResults = validationResult(req);
     const models = req.context.models;
     const userTeamRoleModel = models.userTeamRole;
 
     if (validationResults.isEmpty()) {
-      const userTeamRole = await userTeamRoleModel.findOne({
-        where: { id: req.params.id },
+      const userTeamRoles = await userTeamRoleModel.findAll({
+        where: { workspaceId: req.params.id },
       });
 
-      res.status(200).send(userTeamRole);
+      res.status(200).send(userTeamRoles);
     } else {
       res.send(400);
     }
@@ -136,7 +136,7 @@ const deleteUserTeamRoleById = async (req, res) => {
 export default {
   addRoleToUserInTeam,
   getAllUserTeamRoles,
-  getUserTeamRoleById,
+  getAllUserTeamRoleByWorkspaceId,
   editUserTeamRoleById,
   deleteUserTeamRoleById,
 };

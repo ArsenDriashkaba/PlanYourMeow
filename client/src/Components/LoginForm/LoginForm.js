@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
+import userContext from "../../context/userContext";
 
 import api from "../../Api";
 
@@ -7,10 +8,8 @@ import "./LoginForm.css";
 
 const LoginForm = () => {
   const [loginInfo, setLoginInfo] = useState({});
-  const [error, setError] = useState();
-  const [loginStatus, setLoginStatus] = useState();
-  const [userToken, setUserToken] = useState("");
-  const [loginReqState, setLoginReqState] = useState({});
+  const [error, setError] = useState(null);
+  const userCtx = useContext(userContext);
 
   const navigate = useNavigate();
 
@@ -20,24 +19,12 @@ const LoginForm = () => {
     await api
       .post("/users/login", loginInfo)
       .then((res) => {
-        setLoginReqState(res.data);
-        setUserToken(res.data.token);
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.id);
-      })
-      .catch((error) => setError(error))
-      .finally(() => {
-        if (loginReqState.auth) {
-          getAuthInfo();
+        if (res.status === 200) {
+          userCtx.userLogIn(res.data);
+          navigate("/workspaces");
         }
-      });
-  };
-
-  const getAuthInfo = () => {
-    api.get("/users/login").then((res) => {
-      setLoginStatus(res?.data.loggedIn);
-      console.log(res);
-    });
+      })
+      .catch((error) => setError(error));
   };
 
   const handleEmailChange = (event) =>
@@ -46,15 +33,13 @@ const LoginForm = () => {
   const handlePasswordChange = (event) =>
     setLoginInfo({ ...loginInfo, password: event.target.value });
 
-  useEffect(getAuthInfo, []);
-
   if (error) {
     return <p>Page error :c</p>;
   }
 
   return (
     <form onSubmit={handleSubmit} id="login-form">
-      <h2>{loginStatus}</h2>
+      <h2>Sandwich boi</h2>
       <label>Email : </label>
       <input
         type="text"
@@ -73,11 +58,7 @@ const LoginForm = () => {
       />
       <button type="submit">Login</button>
       <input type="checkbox" checked="checked" /> Remember me
-      <button type="button" className="cancelbtn">
-        {" "}
-        Cancel
-      </button>
-      Forgot <span> password? </span>
+      <span>Forgot password? </span>
     </form>
   );
 };

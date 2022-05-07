@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
-import RegistrationForm from "../../Components/RegistrationForm/RegistrationForm";
+// import { Link } from "react-router-dom";
+// import RegistrationForm from "../../Components/RegistrationForm/RegistrationForm";
 import LoginForm from "../../Components/LoginForm/LoginForm";
+import userContext from "../../context/userContext";
 
 import "./MainPage.css";
 
@@ -11,7 +12,7 @@ const MainPage = () => {
         <button className="main-page-btn">All Workspaces</button>
       </Link> */}
       <LoginForm />
-      <RegistrationForm />
+      {/* <RegistrationForm /> */}
     </div>
   );
 };

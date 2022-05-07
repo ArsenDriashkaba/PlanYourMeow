@@ -18,7 +18,7 @@ const WorkspaceListPage = () => {
 
     api
       .get("/workspaces", {
-        headers: { "auth-token": localStorage.getItem("token") },
+        headers: { "auth-token": localStorage.getItem("id_token") },
       })
       .then((res) => setWorkspaces(res.data))
       .catch((error) => setError(error))

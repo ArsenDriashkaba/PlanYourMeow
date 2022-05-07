@@ -4,21 +4,21 @@ const { DataTypes } = Sequelize;
 
 const userTeamRole = (sequelize) => {
   const userTeamRoleModel = sequelize.define("userTeamRole", {
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    workspace_id: {
+    workspaceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    role_id: {
+    roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
