@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import "./UserPreview.css";
 
 const UserPreview = ({ userInfo, setUser }) => {

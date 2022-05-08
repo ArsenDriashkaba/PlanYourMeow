@@ -1,5 +1,4 @@
 import express from "express";
-import { param, body } from "express-validator";
 
 import services from "../services";
 
@@ -17,6 +16,11 @@ router.get(
 router.get("/:id", services.userTeamRoles.getAllUserTeamRoleByWorkspaceId);
 
 router.patch("/:id", services.userTeamRoles.editUserTeamRoleById);
+
+router.delete(
+  "/:workspaceId/:roleId/:userId",
+  services.userTeamRoles.deleteUserFromWorkspace
+);
 
 router.delete("/:id", services.userTeamRoles.deleteUserTeamRoleById);
 

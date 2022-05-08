@@ -205,6 +205,57 @@ const deleteUserTeamRoleById = async (req, res) => {
   }
 };
 
+const deleteUserFromWorkspace = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const workspaceId = req.params.workspaceId;
+    const roleId = req.params.roleId;
+    const userId = req.params.userId;
+
+    console.log(workspaceId, roleId, userId);
+
+    const userWorkspaceAsoc = sequelize.models.userWorkspace;
+    const userRoleAsoc = sequelize.models.userRole;
+    const workspaceUserRoleAsoc = sequelize.models.workspaceUserRole;
+
+    const userRoleForWorkspace = await userRoleAsoc.findOne({
+      where: { userId: userId, roleId: roleId },
+    });
+
+    console.log("___________________>", userRoleForWorkspace);
+
+    await userWorkspaceAsoc.destroy({
+      where: {
+        workspaceId: workspaceId,
+        userId: userId,
+      },
+    });
+
+    await workspaceUserRoleAsoc.destroy({
+      where: {
+        workspaceId: workspaceId,
+        userRoleId: userRoleForWorkspace.id,
+      },
+    });
+
+    const successMsg = `You've succsesfully deleted user with id "${req.params.userId}" from workspace with id "${req.params.workspaceId}" `;
+
+    console.log(successMsg);
+    res.status(200).send(successMsg);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
 export default {
   addRoleToUserInTeam,
   getAllUserTeamRoles,
@@ -212,4 +263,5 @@ export default {
   editUserTeamRoleById,
   deleteUserTeamRoleById,
   getUserWorkspaceRole,
+  deleteUserFromWorkspace,
 };
