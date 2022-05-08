@@ -8,7 +8,13 @@ import "./WorkspacePreview.css";
 
 import DeleteElementBtn from "../../DeleteElementBtn/DeleteElementBtn";
 
-const WorkspacePreview = ({ name, workspace_id, fetchData, errorHandler }) => {
+const WorkspacePreview = ({
+  name,
+  workspace_id,
+  fetchData,
+  errorHandler,
+  numberOfparticipants,
+}) => {
   const [userRole, setUserRole] = useState();
   const [error, setError] = useState();
   const userCtx = useContext(userContext);
@@ -46,7 +52,8 @@ const WorkspacePreview = ({ name, workspace_id, fetchData, errorHandler }) => {
         )}
       </div>
       <hr />
-      <p>Number of participants: {0}</p>
+      <p>Owner: {userCtx?.username}</p>
+      <p>Number of participants: {numberOfparticipants}</p>
     </div>
   );
 };

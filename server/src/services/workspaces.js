@@ -69,7 +69,12 @@ const getAllUserWorkspaces = async (req, res) => {
   try {
     const user = await req.context.models.user.findOne({
       where: { id: req.params.id },
-      include: [{ model: req.context.models.workspace }],
+      include: [
+        {
+          model: req.context.models.workspace,
+          include: { model: req.context.models.user },
+        },
+      ],
     });
     const workspaces = user.workspaces;
 
