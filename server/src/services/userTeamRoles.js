@@ -1,4 +1,5 @@
 import { validationResult } from "express-validator";
+import sequelize from "../config/database";
 
 const addRoleToUserInTeam = async (req, res) => {
   try {
@@ -6,14 +7,43 @@ const addRoleToUserInTeam = async (req, res) => {
 
     if (validationResults.isEmpty()) {
       const { workspaceId, roleId, userId } = { ...req.body };
+      const userWorkspaceAsoc = req.context.models.userWorkspace;
+      const userRoleAsoc = req.context.models.userRole;
+      const workspaceUserRoleAsoc = req.context.models.workspaceUserRole;
 
-      const newUserTeamRole = await sequelize.models.userTeamRole.create({
-        user_id: userId,
-        workspace_id: workspaceId,
-        role_id: roleId,
+      // adding user to the workspace
+      await userWorkspaceAsoc.create({
+        userId: userId,
+        workspaceId: workspaceId,
       });
 
-      res.status(200).send(newUserTeamRole);
+      // giving user role
+      const userRoleForWorkspace = await userRoleAsoc.findOne({
+        where: { userId: userId, roleId: roleId },
+      });
+
+      if (!userRoleForWorkspace) {
+        const userRoleWorkspace = await userRoleAsoc.create({
+          userId: userId,
+          roleId: roleId,
+        });
+
+        await workspaceUserRoleAsoc.create({
+          workspaceId: workspaceId,
+          userRoleId: userRoleWorkspace.id,
+        });
+      } else {
+        await workspaceUserRoleAsoc.create({
+          workspaceId: workspaceId,
+          userRoleId: userRoleForWorkspace.id,
+        });
+      }
+
+      res
+        .status(200)
+        .send(
+          `User with id "${userId} " have been added to the team with id "${workspaceId}"`
+        );
     } else {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
@@ -25,30 +55,17 @@ const addRoleToUserInTeam = async (req, res) => {
 };
 
 const getUserWorkspaceRole = async (req, res) => {
-  //TODO:
   try {
-    const userWorkspaceRoles =
-      await req.context.models.workspaceUserRole.findAll({
-        where: {
-          workspaceId: req.params.workspaceId,
+    const userWorkspaceRoles = await sequelize.models.workspace.findAll({
+      where: {
+        id: req.params.workspaceId,
+      },
+      include: [
+        {
+          model: sequelize.models.userRole,
+          where: { userId: req.params.userId },
         },
-      });
-
-    const userRoles = userWorkspaceRoles.map(async (element) => {
-      const userRole = await req.context.models.userRole.findOne({
-        where: { id: element.userRoleId },
-      });
-
-      return userRole;
-    });
-
-    const userRoleIdx = userRoles.filter((elem) => {
-      console.log("------->", elem);
-      elem.userId.toString() == req.params.userId.toString();
-    });
-
-    const role = await req.context.models.role.findOne({
-      where: { id: userRolesFiltered[0].roleId },
+      ],
     });
 
     res.status(200).send(userWorkspaceRoles);

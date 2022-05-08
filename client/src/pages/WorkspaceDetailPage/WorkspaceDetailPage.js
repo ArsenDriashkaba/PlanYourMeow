@@ -45,22 +45,22 @@ const WorkspaceDetailPage = () => {
 
   useEffect(setFetchedBoards, []);
 
-  //TODO:
-  // useEffect(() => {
-  //   if (userCtx.userId) {
-  //     api
-  //       .get(`/userTeamRoles/${userCtx.userId}/${id}`)
-  //       .then((res) => {
-  //         setUserRole(res.data);
-  //         console.log(res.data);
-  //       })
-  //       .catch((error) => setError(error));
-  //   }
-  // }, [id, userCtx.userId]);
+  // finding userRole
+  useEffect(() => {
+    if (userCtx.userId) {
+      api
+        .get(`/userTeamRoles/${userCtx.userId}/${id}`)
+        .then((res) => {
+          setUserRole(res.data[0].userRoles[0].roleId);
+        })
+        .catch((error) => setError(error));
+    }
+  }, [id, userCtx.userId]);
 
   const filteredBoardsByWorkspace = boards.filter(
     (board) => board.workspaceId === parseInt(id)
   );
+  const adminRole = userRole === 1 || userRole === 2;
 
   if (isLoading) {
     return <p>Is loading</p>;
@@ -74,12 +74,14 @@ const WorkspaceDetailPage = () => {
     <section id="board-list-section">
       <header id="board-list-header">
         <h1>{workspace?.name}</h1>
-        <CreateInput
-          elementId={id}
-          fetchData={setFetchedBoards}
-          targetId={"workspaceId"}
-          postUrl={"boards"}
-        />
+        {adminRole && (
+          <CreateInput
+            elementId={id}
+            fetchData={setFetchedBoards}
+            targetId={"workspaceId"}
+            postUrl={"boards"}
+          />
+        )}
       </header>
       <hr />
       <BoardList
@@ -88,6 +90,7 @@ const WorkspaceDetailPage = () => {
         errorHandler={setError}
         isChange={isChange}
         setIsChange={setIsChange}
+        adminRole={adminRole}
       />
     </section>
   );

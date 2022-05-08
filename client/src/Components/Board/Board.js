@@ -14,6 +14,7 @@ const Board = ({
   errorHandler,
   boardTickets,
   isChange,
+  adminRole,
 }) => {
   const [tickets, setTickets] = useState(boardTickets);
   const [error, setError] = useState();
@@ -42,12 +43,14 @@ const Board = ({
           <h2 className="board-name">{name}</h2>
           <span className="count-of-tickets">10</span>
         </div>
-        <DeleteElementBtn
-          reqUrl={"boards"}
-          elementId={board_id}
-          fetchData={fetchData}
-          errorHandler={errorHandler}
-        />
+        {adminRole && (
+          <DeleteElementBtn
+            reqUrl={"boards"}
+            elementId={board_id}
+            fetchData={fetchData}
+            errorHandler={errorHandler}
+          />
+        )}
       </header>
       <CreateInput
         elementId={board_id}

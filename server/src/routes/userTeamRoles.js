@@ -5,7 +5,7 @@ import services from "../services";
 
 const router = express.Router();
 
-router.post("/addRoleToUserInTeam", services.userTeamRoles.addRoleToUserInTeam);
+router.post("/", services.userTeamRoles.addRoleToUserInTeam);
 
 router.get("/", services.userTeamRoles.getAllUserTeamRoles);
 

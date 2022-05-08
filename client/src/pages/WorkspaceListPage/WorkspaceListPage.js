@@ -15,6 +15,7 @@ const WorkspaceListPage = () => {
   const [error, setError] = useState();
   const [searchValue, setSearchValue] = useState("");
   const [userId, setUserId] = useState();
+
   const userCtx = useContext(userContext);
 
   const setFetchedWorkspaces = () => {
