@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-import Dropdown from "react-dropdown";
 
 import api from "../../../Api";
 import userContext from "../../../context/userContext";

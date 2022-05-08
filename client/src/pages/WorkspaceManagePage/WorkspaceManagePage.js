@@ -62,7 +62,10 @@ const WorkspaceManagePage = () => {
             <h2>Description</h2>
             <p>{workspaceInfo?.description}</p>
           </div>
-          <FindAddForm />
+          <FindAddForm
+            workspaceId={id}
+            updateWorkspaceInfo={fetchWorkspaceInfo}
+          />
         </div>
         <div className="manage-users-container">
           <SearchInput
