@@ -1,11 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 
+import DeleteElementBtn from "../../DeleteElementBtn/DeleteElementBtn";
+
 import api from "../../../Api";
 import userContext from "../../../context/userContext";
 
 import "./ParticipantPreview.css";
 
-const ParticipantPreview = ({ userInfo, workspaceId }) => {
+const ParticipantPreview = ({
+  userInfo,
+  workspaceId,
+  updateWorkspaceInfo,
+  userRole,
+}) => {
   const [error, setError] = useState();
   const [role, setRole] = useState();
   const [editingState, setEditingState] = useState(false);
@@ -90,6 +97,14 @@ const ParticipantPreview = ({ userInfo, workspaceId }) => {
         </form>
       ) : (
         <button onClick={() => setEditingState(true)}>Change</button>
+      )}
+      {userRole === 1 && (
+        <DeleteElementBtn
+          elementId={userInfo.id}
+          reqUrl={`userTeamRoles/${workspaceId}/${role}`}
+          fetchData={updateWorkspaceInfo}
+          errorHandler={setError}
+        />
       )}
     </div>
   );

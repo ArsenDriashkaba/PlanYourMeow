@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 
+import userContext from "../../context/userContext";
 import FindAddForm from "../../Components/FindAddForm/FindAddForm";
 import ParticipantsList from "../../Components/Workspace/ParticipantsList/ParticipantsList";
 import SearchInput from "../../Components/SearchInput/SearchInput";
@@ -15,6 +16,8 @@ const WorkspaceManagePage = () => {
   const [users, setUsers] = useState([]);
   const [searchFilterValue, setSearchFilterValue] = useState("");
   const [error, setError] = useState();
+  const [userRole, setUserRole] = useState();
+  const userCtx = useContext(userContext);
 
   const fetchWorkspaceInfo = () => {
     setLoading(true);
@@ -30,6 +33,17 @@ const WorkspaceManagePage = () => {
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    if (userCtx.userId) {
+      api
+        .get(`/userTeamRoles/${userCtx.userId}/${id}`)
+        .then((res) => {
+          setUserRole(res.data[0].userRoles[0].roleId);
+        })
+        .catch((error) => setError(error));
+    }
+  }, [id, userCtx.userId]);
 
   useEffect(fetchWorkspaceInfo, [id]);
 
@@ -72,7 +86,12 @@ const WorkspaceManagePage = () => {
             value={searchFilterValue}
             onChange={(event) => setSearchFilterValue(event.target.value)}
           />
-          <ParticipantsList workspaceId={id} participants={filteredUsers} />
+          <ParticipantsList
+            workspaceId={id}
+            participants={filteredUsers}
+            updateWorkspaceInfo={fetchWorkspaceInfo}
+            userRole={userRole}
+          />
         </div>
       </div>
     </section>
