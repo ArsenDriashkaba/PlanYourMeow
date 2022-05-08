@@ -6,23 +6,37 @@ const addRoleToUserInTeam = async (req, res) => {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const { workspaceId, roleId, userId } = { ...req.body };
+      const { workspaceId, roleId, userId, oldRoleId } = { ...req.body };
       const userWorkspaceAsoc = req.context.models.userWorkspace;
       const userRoleAsoc = req.context.models.userRole;
       const workspaceUserRoleAsoc = req.context.models.workspaceUserRole;
 
-      // adding user to the workspace
-      await userWorkspaceAsoc.create({
-        userId: userId,
-        workspaceId: workspaceId,
+      // Checking if user is already in a team
+      const userWorkspaceExist = await userWorkspaceAsoc.findOne({
+        where: { userId: userId, workspaceId: workspaceId },
       });
 
-      // giving user role
+      // adding user to the workspace
+      if (!userWorkspaceExist) {
+        await userWorkspaceAsoc.create({
+          userId: userId,
+          workspaceId: workspaceId,
+        });
+      }
+
       const userRoleForWorkspace = await userRoleAsoc.findOne({
         where: { userId: userId, roleId: roleId },
       });
 
+      await userRoleAsoc.destroy({
+        where: {
+          userId: userId,
+          roleId: oldRoleId,
+        },
+      });
+
       if (!userRoleForWorkspace) {
+        // creating association user-role
         const userRoleWorkspace = await userRoleAsoc.create({
           userId: userId,
           roleId: roleId,
@@ -33,6 +47,14 @@ const addRoleToUserInTeam = async (req, res) => {
           userRoleId: userRoleWorkspace.id,
         });
       } else {
+        // Check if user have some role in the workspace
+        await workspaceUserRoleAsoc.destroy({
+          where: {
+            workspaceId: workspaceId,
+            userRoleId: userRoleForWorkspace.id,
+          },
+        });
+
         await workspaceUserRoleAsoc.create({
           workspaceId: workspaceId,
           userRoleId: userRoleForWorkspace.id,

@@ -102,6 +102,11 @@ const getWorkspaceById = async (req, res) => {
             include: [{ model: ticketModel }],
           },
         ],
+        include: [
+          {
+            model: req.context.models.user,
+          },
+        ],
       });
 
       res.status(200).send(workspace);

@@ -1,0 +1,38 @@
+#workspace-manage-section {
+  width: 100%;
+  min-height: 90vh;
+}
+
+#workspace-manage-header {
+  min-height: 8vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: aquamarine;
+}
+
+#workspace-manage-container {
+  display: flex;
+  height: 82vh;
+  border: 0.2rem solid green;
+}
+
+#description-container {
+  min-height: 20vh;
+  border: 0.2rem solid rgb(116, 131, 18);
+}
+
+.search-add-user-container {
+  width: 50%;
+  border: 0.2rem solid rgb(23, 0, 128);
+}
+
+.manage-users-container {
+  width: 50%;
+  border: 0.2rem solid rgb(128, 0, 122);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}

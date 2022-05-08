@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import userContext from "../../context/userContext";
 
@@ -81,6 +82,11 @@ const WorkspaceDetailPage = () => {
             targetId={"workspaceId"}
             postUrl={"boards"}
           />
+        )}
+        {adminRole && (
+          <Link to={`/workspaces/manage/${id}`}>
+            <button id="manage-workspace">Manage</button>
+          </Link>
         )}
       </header>
       <hr />
