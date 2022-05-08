@@ -24,7 +24,7 @@ const ticket = (sequelize) => {
       type: DataTypes.STRING,
     },
     deadline: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
     },
     label: {
       type: DataTypes.STRING,

@@ -60,6 +60,8 @@ const TicketDetailPage = () => {
     ...ticketInfo,
   };
 
+  console.log(ticketInfo);
+
   return (
     <section id="ticket-detail-page">
       <ElementPageHeader
@@ -79,7 +81,10 @@ const TicketDetailPage = () => {
           setElementParams={setNewTicketParams}
           elementInfo={ticketInfo}
         />
-        <TicketParamsContainer />
+        <TicketParamsContainer
+          ticketInfo={ticketInfo}
+          fetchData={setFetchedTicketInfo}
+        />
       </div>
     </section>
   );

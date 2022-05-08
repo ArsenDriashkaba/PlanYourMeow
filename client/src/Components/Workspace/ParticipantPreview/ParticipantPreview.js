@@ -39,6 +39,7 @@ const ParticipantPreview = ({
     event.preventDefault();
 
     if (!chosenRole) {
+      setEditingState(false);
       return;
     }
 
