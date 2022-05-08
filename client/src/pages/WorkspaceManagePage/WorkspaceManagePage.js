@@ -13,6 +13,7 @@ const WorkspaceManagePage = () => {
   const [workspaceInfo, setWorkspaceInfo] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [searchFilterValue, setSearchFilterValue] = useState("");
   const [error, setError] = useState();
 
   const fetchWorkspaceInfo = () => {
@@ -30,20 +31,6 @@ const WorkspaceManagePage = () => {
       .finally(() => setLoading(false));
   };
 
-  // const fetchUsersAndRoles = () => {
-  //   setLoading(true);
-
-  //   api
-  //     .get(`/userTeamRoles/${id}`, {
-  //       headers: { "auth-token": localStorage.getItem("id_token") },
-  //     })
-  //     .then((res) => setUsersAndRoles(res.data))
-  //     .catch((error) => setError(error))
-  //     .finally(() => setLoading(false));
-
-  //   console.log("Wprkspace info have been fetched!");
-  // };
-
   useEffect(fetchWorkspaceInfo, [id]);
 
   if (isLoading) {
@@ -54,7 +41,15 @@ const WorkspaceManagePage = () => {
     return <p>Error occured :c</p>;
   }
 
-  console.log(users);
+  const filteredUsers = users.filter(
+    (user) =>
+      user?.first_name
+        .toLowerCase()
+        .includes(searchFilterValue.toLowerCase()) ||
+      user?.second_name.toLowerCase().includes(searchFilterValue.toLowerCase())
+  );
+
+  console.log(filteredUsers);
 
   return (
     <section id="workspace-manage-section">
@@ -70,8 +65,11 @@ const WorkspaceManagePage = () => {
           <FindAddForm />
         </div>
         <div className="manage-users-container">
-          <SearchInput />
-          <ParticipantsList workspaceId={id} participants={users} />
+          <SearchInput
+            value={searchFilterValue}
+            onChange={(event) => setSearchFilterValue(event.target.value)}
+          />
+          <ParticipantsList workspaceId={id} participants={filteredUsers} />
         </div>
       </div>
     </section>
