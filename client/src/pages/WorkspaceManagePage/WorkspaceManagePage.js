@@ -5,6 +5,8 @@ import userContext from "../../context/userContext";
 import FindAddForm from "../../Components/FindAddForm/FindAddForm";
 import ParticipantsList from "../../Components/Workspace/ParticipantsList/ParticipantsList";
 import SearchInput from "../../Components/SearchInput/SearchInput";
+import Description from "../../Components/Ticket/Description/Description";
+import ElementPageHeader from "../../Components/Ticket/TicketPageHeader/ElementPageHeader";
 
 import api from "../../Api";
 import "./WorkspaceManagePage.css";
@@ -17,6 +19,8 @@ const WorkspaceManagePage = () => {
   const [searchFilterValue, setSearchFilterValue] = useState("");
   const [error, setError] = useState();
   const [userRole, setUserRole] = useState();
+  const [editMode, setEditMode] = useState(false);
+  const [newWorkspaceParams, setNewWorkspaceParams] = useState();
   const userCtx = useContext(userContext);
 
   const fetchWorkspaceInfo = () => {
@@ -32,6 +36,22 @@ const WorkspaceManagePage = () => {
       })
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
+  };
+
+  const updateWorkspaceInfo = () => {
+    api
+      .patch(`/workspaces/${id}`, newWorkspaceParams, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
+      .then(() => {
+        fetchWorkspaceInfo();
+        console.log("Workspace is updated :)");
+      })
+      .catch((error) => setError(error));
+  };
+
+  const toggleEditMode = () => {
+    editMode ? setEditMode(false) : setEditMode(true);
   };
 
   useEffect(() => {
@@ -63,19 +83,30 @@ const WorkspaceManagePage = () => {
       user?.second_name.toLowerCase().includes(searchFilterValue.toLowerCase())
   );
 
-  console.log(filteredUsers);
+  const { name, description } = {
+    ...workspaceInfo,
+  };
 
   return (
     <section id="workspace-manage-section">
-      <header id="workspace-manage-header">
-        <h1>{workspaceInfo?.name}</h1>
-      </header>
+      <ElementPageHeader
+        name={name}
+        editMode={editMode}
+        toggleEditMode={toggleEditMode}
+        fetchData={fetchWorkspaceInfo}
+        setElementParams={setNewWorkspaceParams}
+        elementInfo={workspaceInfo}
+        updateElementInfo={updateWorkspaceInfo}
+      />
       <div id="workspace-manage-container">
         <div className="search-add-user-container">
-          <div id="description-container">
-            <h2>Description</h2>
-            <p>{workspaceInfo?.description}</p>
-          </div>
+          <Description
+            description={description}
+            editMode={editMode}
+            fetchData={fetchWorkspaceInfo}
+            setElementParams={setNewWorkspaceParams}
+            elementInfo={workspaceInfo}
+          />
           <FindAddForm
             workspaceId={id}
             updateWorkspaceInfo={fetchWorkspaceInfo}

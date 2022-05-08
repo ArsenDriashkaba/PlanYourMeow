@@ -1,37 +1,37 @@
 import { useState } from "react";
 
-import "./TicketPageHeader.css";
+import "./ElementPageHeader.css";
 
-const TicketPageHeader = ({
+const ElementPageHeader = ({
   name,
   editMode,
   toggleEditMode,
-  ticketInfo,
-  setTicketParams,
-  updateTicketInfo,
+  elementInfo,
+  setElementParams,
+  updateElementInfo,
 }) => {
-  const [ticketName, setTicketName] = useState(name);
+  const [elementName, setElementName] = useState(name);
 
   const changeName = (event) => {
-    const newTicketInfo = { ...ticketInfo };
+    const newElementInfo = { ...elementInfo };
     const value = event.target.value;
 
-    newTicketInfo.name = value;
-    setTicketName(value);
+    newElementInfo.name = value;
+    setElementName(value);
 
-    setTicketParams(newTicketInfo);
+    setElementParams(newElementInfo);
   };
 
   const saveEventHandler = () => {
-    updateTicketInfo();
+    updateElementInfo();
     toggleEditMode();
   };
 
   return (
-    <header id="ticket-page-header">
+    <header id="element-page-header">
       <h1>
         {editMode ? (
-          <input value={ticketName} onChange={changeName}></input>
+          <input value={elementName} onChange={changeName}></input>
         ) : (
           name
         )}
@@ -46,4 +46,4 @@ const TicketPageHeader = ({
   );
 };
 
-export default TicketPageHeader;
+export default ElementPageHeader;

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import TicketPageHeader from "../../Components/Ticket/TicketPageHeader/TicketPageHeader";
+import ElementPageHeader from "../../Components/Ticket/TicketPageHeader/ElementPageHeader";
 import TicketParamsContainer from "../../Components/Ticket/TicketParamsContainer/TicketParamsContainer";
-import TicketDescription from "../../Components/Ticket/TicketDescription/TicketDescription";
+import Description from "../../Components/Ticket/Description/Description";
 import api from "../../Api";
 
 import "./TicketDetailPage.css";
@@ -62,22 +62,22 @@ const TicketDetailPage = () => {
 
   return (
     <section id="ticket-detail-page">
-      <TicketPageHeader
+      <ElementPageHeader
         name={name}
         editMode={editMode}
         toggleEditMode={toggleEditMode}
         fetchData={setFetchedTicketInfo}
-        setTicketParams={setNewTicketParams}
-        ticketInfo={ticketInfo}
-        updateTicketInfo={updateTicketInfo}
+        setElementParams={setNewTicketParams}
+        elementInfo={ticketInfo}
+        updateElementInfo={updateTicketInfo}
       />
       <div className="ticket-detail-body">
-        <TicketDescription
+        <Description
           description={description}
           editMode={editMode}
           fetchData={setFetchedTicketInfo}
-          setTicketParams={setNewTicketParams}
-          ticketInfo={ticketInfo}
+          setElementParams={setNewTicketParams}
+          elementInfo={ticketInfo}
         />
         <TicketParamsContainer />
       </div>

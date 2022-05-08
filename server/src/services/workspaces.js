@@ -146,12 +146,7 @@ const editWorkspaceById = async (req, res) => {
 
     const workspaceModel = await sequelize.models.workspace;
 
-    await workspaceModel.update(
-      {
-        name: req.body.name,
-      },
-      { where: { id: workspaceId } }
-    );
+    await workspaceModel.update(req.body, { where: { id: workspaceId } });
 
     const successMsg = `You've succsesfully updated workspace with id: ${req.params.id}`;
 
