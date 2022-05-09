@@ -1,0 +1,26 @@
+.label-container {
+  width: 1.8rem;
+  min-height: 4rem;
+  background-color: rgb(235, 235, 235);
+  border-radius: 0.4rem;
+}
+
+.label-green {
+  background-color: rgb(54, 207, 37);
+}
+
+.label-blue {
+  background-color: rgb(46, 135, 231);
+}
+
+.label-red {
+  background-color: rgb(231, 55, 46);
+}
+
+.label-yellow {
+  background-color: rgb(231, 225, 46);
+}
+
+.label-purple {
+  background-color: rgb(185, 50, 238);
+}

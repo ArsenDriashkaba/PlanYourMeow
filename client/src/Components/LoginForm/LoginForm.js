@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
+import userContext from "../../context/userContext";
 
 import api from "../../Api";
 
@@ -7,20 +8,26 @@ import "./LoginForm.css";
 
 const LoginForm = () => {
   const [loginInfo, setLoginInfo] = useState({});
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
+  const userCtx = useContext(userContext);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    api
+    await api
       .post("/users/login", loginInfo)
       .then((res) => {
-        setLoginInfo(res.data);
-        console.log(loginInfo);
+        if (res.status === 200) {
+          userCtx.userLogIn(res.data);
+          navigate("/workspaces");
+        }
       })
-      .catch((error) => setError(error));
+      .catch((error) => {
+        setError(error);
+        navigate("/");
+      });
   };
 
   const handleEmailChange = (event) =>
@@ -31,6 +38,8 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} id="login-form">
+      <span>{error?.message}</span>
+      <h2>Login</h2>
       <label>Email : </label>
       <input
         type="text"
@@ -47,13 +56,9 @@ const LoginForm = () => {
         onChange={handlePasswordChange}
         required
       />
-      <button type="submit">Login</button>
-      <input type="checkbox" checked="checked" /> Remember me
-      <button type="button" className="cancelbtn">
-        {" "}
-        Cancel
+      <button type="submit" className="login-btn">
+        Login
       </button>
-      Forgot <span> password? </span>
     </form>
   );
 };

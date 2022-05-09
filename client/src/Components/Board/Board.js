@@ -14,13 +14,16 @@ const Board = ({
   errorHandler,
   boardTickets,
   isChange,
+  userRole,
 }) => {
   const [tickets, setTickets] = useState(boardTickets);
   const [error, setError] = useState();
 
   const setFetchedTickets = () => {
     api
-      .get(`/tickets`)
+      .get(`/tickets`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
       .then((res) => setTickets(res.data))
       .catch((error) => setError(error));
 
@@ -40,12 +43,14 @@ const Board = ({
           <h2 className="board-name">{name}</h2>
           <span className="count-of-tickets">10</span>
         </div>
-        <DeleteElementBtn
-          reqUrl={"boards"}
-          elementId={board_id}
-          fetchData={fetchData}
-          errorHandler={errorHandler}
-        />
+        {(userRole === 2 || userRole === 1) && (
+          <DeleteElementBtn
+            reqUrl={"boards"}
+            elementId={board_id}
+            fetchData={fetchData}
+            errorHandler={errorHandler}
+          />
+        )}
       </header>
       <CreateInput
         elementId={board_id}
@@ -60,6 +65,7 @@ const Board = ({
           tickets={filteredTicketsByBoard}
           fetchData={setFetchedTickets}
           boardId={board_id}
+          userRole={userRole}
         />
       )}
     </div>

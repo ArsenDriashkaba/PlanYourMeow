@@ -1,20 +1,71 @@
 import { validationResult } from "express-validator";
-import { database } from "../..";
+import sequelize from "../config/database";
 
 const addRoleToUserInTeam = async (req, res) => {
   try {
     const validationResults = validationResult(req);
 
     if (validationResults.isEmpty()) {
-      const { workspaceId, roleId, userId } = { ...req.body };
+      const { workspaceId, roleId, userId, oldRoleId } = { ...req.body };
+      const userWorkspaceAsoc = req.context.models.userWorkspace;
+      const userRoleAsoc = req.context.models.userRole;
+      const workspaceUserRoleAsoc = req.context.models.workspaceUserRole;
 
-      const newUserTeamRole = await sequelize.models.userTeamRole.create({
-        user_id: userId,
-        workspace_id: workspaceId,
-        role_id: roleId,
+      // Checking if user is already in a team
+      const userWorkspaceExist = await userWorkspaceAsoc.findOne({
+        where: { userId: userId, workspaceId: workspaceId },
       });
 
-      res.status(200).send(newUserTeamRole);
+      // adding user to the workspace
+      if (!userWorkspaceExist) {
+        await userWorkspaceAsoc.create({
+          userId: userId,
+          workspaceId: workspaceId,
+        });
+      }
+
+      const userRoleForWorkspace = await userRoleAsoc.findOne({
+        where: { userId: userId, roleId: roleId },
+      });
+
+      await userRoleAsoc.destroy({
+        where: {
+          userId: userId,
+          roleId: oldRoleId,
+        },
+      });
+
+      if (!userRoleForWorkspace) {
+        // creating association user-role
+        const userRoleWorkspace = await userRoleAsoc.create({
+          userId: userId,
+          roleId: roleId,
+        });
+
+        await workspaceUserRoleAsoc.create({
+          workspaceId: workspaceId,
+          userRoleId: userRoleWorkspace.id,
+        });
+      } else {
+        // Check if user have some role in the workspace
+        await workspaceUserRoleAsoc.destroy({
+          where: {
+            workspaceId: workspaceId,
+            userRoleId: userRoleForWorkspace.id,
+          },
+        });
+
+        await workspaceUserRoleAsoc.create({
+          workspaceId: workspaceId,
+          userRoleId: userRoleForWorkspace.id,
+        });
+      }
+
+      res
+        .status(200)
+        .send(
+          `User with id "${userId} " have been added to the team with id "${workspaceId}"`
+        );
     } else {
       req.log.info(`Validation error value: ${validationResults}`);
       res.status(400).send(validationResults);
@@ -22,6 +73,27 @@ const addRoleToUserInTeam = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
+  }
+};
+
+const getUserWorkspaceRole = async (req, res) => {
+  try {
+    const userWorkspaceRoles = await sequelize.models.workspace.findAll({
+      where: {
+        id: req.params.workspaceId,
+      },
+      include: [
+        {
+          model: sequelize.models.userRole,
+          where: { userId: req.params.userId },
+        },
+      ],
+    });
+
+    res.status(200).send(userWorkspaceRoles);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 
@@ -36,18 +108,18 @@ const getAllUserTeamRoles = async (req, res) => {
   }
 };
 
-const getUserTeamRoleById = async (req, res) => {
+const getAllUserTeamRoleByWorkspaceId = async (req, res) => {
   try {
     const validationResults = validationResult(req);
     const models = req.context.models;
     const userTeamRoleModel = models.userTeamRole;
 
     if (validationResults.isEmpty()) {
-      const userTeamRole = await userTeamRoleModel.findOne({
-        where: { id: req.params.id },
+      const userTeamRoles = await userTeamRoleModel.findAll({
+        where: { workspaceId: req.params.id },
       });
 
-      res.status(200).send(userTeamRole);
+      res.status(200).send(userTeamRoles);
     } else {
       res.send(400);
     }
@@ -133,10 +205,63 @@ const deleteUserTeamRoleById = async (req, res) => {
   }
 };
 
+const deleteUserFromWorkspace = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+
+    if (!validationResults.isEmpty()) {
+      console.log(validationResults);
+      res.status(400).send(validationResults);
+
+      return;
+    }
+
+    const workspaceId = req.params.workspaceId;
+    const roleId = req.params.roleId;
+    const userId = req.params.userId;
+
+    console.log(workspaceId, roleId, userId);
+
+    const userWorkspaceAsoc = sequelize.models.userWorkspace;
+    const userRoleAsoc = sequelize.models.userRole;
+    const workspaceUserRoleAsoc = sequelize.models.workspaceUserRole;
+
+    const userRoleForWorkspace = await userRoleAsoc.findOne({
+      where: { userId: userId, roleId: roleId },
+    });
+
+    console.log("___________________>", userRoleForWorkspace);
+
+    await userWorkspaceAsoc.destroy({
+      where: {
+        workspaceId: workspaceId,
+        userId: userId,
+      },
+    });
+
+    await workspaceUserRoleAsoc.destroy({
+      where: {
+        workspaceId: workspaceId,
+        userRoleId: userRoleForWorkspace.id,
+      },
+    });
+
+    const successMsg = `You've succsesfully deleted user with id "${req.params.userId}" from workspace with id "${req.params.workspaceId}" `;
+
+    console.log(successMsg);
+    res.status(200).send(successMsg);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
 export default {
   addRoleToUserInTeam,
   getAllUserTeamRoles,
-  getUserTeamRoleById,
+  getAllUserTeamRoleByWorkspaceId,
   editUserTeamRoleById,
   deleteUserTeamRoleById,
+  getUserWorkspaceRole,
+  deleteUserFromWorkspace,
 };

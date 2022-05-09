@@ -1,0 +1,18 @@
+.find-add-user-form {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.chosenUser {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-user-to-workspace-btn {
+  width: 7rem;
+  height: 3rem;
+  margin-left: 3rem;
+}

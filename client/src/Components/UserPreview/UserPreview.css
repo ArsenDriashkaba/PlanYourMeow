@@ -1,0 +1,8 @@
+.find-user-preview {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.find-user-preview:hover {
+  background-color: rgb(235, 235, 235);
+}

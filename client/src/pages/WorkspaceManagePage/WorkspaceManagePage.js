@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 
+import userContext from "../../context/userContext";
 import FindAddForm from "../../Components/FindAddForm/FindAddForm";
 import ParticipantsList from "../../Components/Workspace/ParticipantsList/ParticipantsList";
+import SearchInput from "../../Components/SearchInput/SearchInput";
+import Description from "../../Components/Ticket/Description/Description";
+import ElementPageHeader from "../../Components/Ticket/TicketPageHeader/ElementPageHeader";
 
 import api from "../../Api";
 import "./WorkspaceManagePage.css";
@@ -10,36 +14,58 @@ import "./WorkspaceManagePage.css";
 const WorkspaceManagePage = () => {
   const { id } = useParams();
   const [workspaceInfo, setWorkspaceInfo] = useState([]);
-  const [usersAndRoles, setUsersAndRoles] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [searchFilterValue, setSearchFilterValue] = useState("");
   const [error, setError] = useState();
+  const [userRole, setUserRole] = useState();
+  const [editMode, setEditMode] = useState(false);
+  const [newWorkspaceParams, setNewWorkspaceParams] = useState();
+  const userCtx = useContext(userContext);
 
   const fetchWorkspaceInfo = () => {
     setLoading(true);
 
     api
-      .get(`/workspaces/${id}`)
-      .then((res) => setWorkspaceInfo(res.data))
+      .get(`/workspaces/${id}`, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
+      .then((res) => {
+        setWorkspaceInfo(res.data);
+        setUsers(res.data.users);
+      })
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
-
-    console.log("Wprkspace info have been fetched!");
   };
 
-  const fetchUsersAndRoles = () => {
-    setLoading(true);
-
+  const updateWorkspaceInfo = () => {
     api
-      .get(`/userTeamRoles/${id}`)
-      .then((res) => setUsersAndRoles(res.data))
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
-
-    console.log("Wprkspace info have been fetched!");
+      .patch(`/workspaces/${id}`, newWorkspaceParams, {
+        headers: { "auth-token": localStorage.getItem("id_token") },
+      })
+      .then(() => {
+        fetchWorkspaceInfo();
+        console.log("Workspace is updated :)");
+      })
+      .catch((error) => setError(error));
   };
+
+  const toggleEditMode = () => {
+    editMode ? setEditMode(false) : setEditMode(true);
+  };
+
+  useEffect(() => {
+    if (userCtx.userId) {
+      api
+        .get(`/userTeamRoles/${userCtx.userId}/${id}`)
+        .then((res) => {
+          setUserRole(res.data[0].userRoles[0].roleId);
+        })
+        .catch((error) => setError(error));
+    }
+  }, [id, userCtx.userId]);
 
   useEffect(fetchWorkspaceInfo, [id]);
-  //   useEffect(fetchUsersAndRoles, [id, usersAndRoles]);
 
   if (isLoading) {
     return <p>Is loading</p>;
@@ -49,16 +75,59 @@ const WorkspaceManagePage = () => {
     return <p>Error occured :c</p>;
   }
 
+  const filteredUsers = users.filter(
+    (user) =>
+      user?.first_name
+        .toLowerCase()
+        .includes(searchFilterValue.toLowerCase()) ||
+      user?.second_name.toLowerCase().includes(searchFilterValue.toLowerCase())
+  );
+
+  const { name, description } = {
+    ...workspaceInfo,
+  };
+
   return (
-    <section>
-      <header>
-        <h1>{workspaceInfo?.name}</h1>
-        <FindAddForm />
-      </header>
-      <div id="workspace-info-container">
-        <ParticipantsList participants={[]} />
-        <div id="description-container">
-          <p>{workspaceInfo?.description}</p>
+    <section id="workspace-manage-section">
+      <ElementPageHeader
+        name={name}
+        editMode={editMode}
+        toggleEditMode={toggleEditMode}
+        fetchData={fetchWorkspaceInfo}
+        setElementParams={setNewWorkspaceParams}
+        elementInfo={workspaceInfo}
+        updateElementInfo={updateWorkspaceInfo}
+      />
+      <div id="workspace-manage-container">
+        <div className="search-add-user-container">
+          <div className="description-container">
+            <Description
+              description={description}
+              editMode={editMode}
+              fetchData={fetchWorkspaceInfo}
+              setElementParams={setNewWorkspaceParams}
+              elementInfo={workspaceInfo}
+            />
+          </div>
+          <hr />
+          <div className="find-add-form-container">
+            <FindAddForm
+              workspaceId={id}
+              updateWorkspaceInfo={fetchWorkspaceInfo}
+            />
+          </div>
+        </div>
+        <div className="manage-users-container">
+          <SearchInput
+            value={searchFilterValue}
+            onChange={(event) => setSearchFilterValue(event.target.value)}
+          />
+          <ParticipantsList
+            workspaceId={id}
+            participants={filteredUsers}
+            updateWorkspaceInfo={fetchWorkspaceInfo}
+            userRole={userRole}
+          />
         </div>
       </div>
     </section>

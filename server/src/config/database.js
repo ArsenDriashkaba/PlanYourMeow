@@ -8,18 +8,38 @@ import userTeamRole from "../models/userTeamRole";
 import workspace from "../models/workspace";
 
 const applyRelations = (sequelize) => {
-  const { board, role, ticket, user, userTeamRole, workspace } =
-    sequelize.models;
+  const { board, role, ticket, user, workspace } = sequelize.models;
+  const { DataTypes } = Sequelize;
+
+  const userRole = sequelize.define("userRole", {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+  });
 
   user.hasMany(ticket);
   ticket.belongsTo(user);
-  workspace.belongsTo(user);
   workspace.hasMany(board);
   board.hasMany(ticket);
   board.belongsTo(workspace);
-  // role.belongsTo(userTeamRole);
-  // user.belongsTo(userTeamRole);
-  // workspace.belongsTo(userTeamRole);
+
+  // Users have a lot of roles
+  role.belongsToMany(user, { through: "userRole" });
+  user.belongsToMany(role, { through: "userRole" });
+
+  // Wokspaces have a lot of users & users have a lot of workspaces
+  workspace.belongsToMany(user, { through: "userWorkspace" });
+  user.belongsToMany(workspace, { through: "userWorkspace" });
+
+  // Workspace has a lot of user-role associations
+  userRole.belongsToMany(workspace, { through: "workspaceUserRole" });
+  workspace.belongsToMany(userRole, { through: "workspaceUserRole" });
 };
 
 const sequelize = new Sequelize("plan_your_meow_db", "root", "Strila654789", {

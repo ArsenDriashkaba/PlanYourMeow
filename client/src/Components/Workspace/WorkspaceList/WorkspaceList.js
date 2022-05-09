@@ -11,6 +11,7 @@ const WorkspaceList = ({ workspaces, fetchData, errorHandler }) => {
           workspace_id={workspace?.id}
           fetchData={fetchData}
           errorHandler={errorHandler}
+          numberOfparticipants={workspace?.users.length}
         />
       ))}
     </div>

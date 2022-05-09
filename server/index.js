@@ -54,6 +54,8 @@ app.use("/users", routes.users);
 app.use("/boards", routes.boards);
 app.use("/workspaces", routes.workspaces);
 app.use("/tickets", routes.tickets);
+app.use("/userTeamRoles", routes.userTeamRoles);
+app.use("/roles", routes.roles);
 
 app.all("*", (_, res) => {
   res.status(404);

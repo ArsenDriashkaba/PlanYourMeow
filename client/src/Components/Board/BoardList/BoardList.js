@@ -12,6 +12,7 @@ const BoardList = ({
   errorHandler,
   isChange,
   setIsChange,
+  userRole,
 }) => {
   const handleDND = ({ destination, draggableId }) => {
     if (!destination) {
@@ -22,7 +23,13 @@ const BoardList = ({
     const ticketId = draggableId;
 
     api
-      .patch(`/tickets/${ticketId}`, { boardId: boardId })
+      .patch(
+        `/tickets/${ticketId}`,
+        { boardId: boardId },
+        {
+          headers: { "auth-token": localStorage.getItem("id_token") },
+        }
+      )
       .then(() => {
         setIsChange(!isChange);
       })
@@ -42,6 +49,7 @@ const BoardList = ({
             errorHandler={errorHandler}
             isChange={isChange}
             setIsChange={setIsChange}
+            userRole={userRole}
           />
         ))}
       </div>

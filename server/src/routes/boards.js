@@ -1,18 +1,18 @@
 import express from "express";
-import { param, body } from "express-validator";
+import verifyAuth from "../services/helpers/verifyToken";
 
 import services from "../services";
 
 const router = express.Router();
 
-router.post("/", services.boards.addBoard);
+router.post("/", verifyAuth, services.boards.addBoard);
 
-router.get("/", services.boards.getAllBoards);
+router.get("/", verifyAuth, services.boards.getAllBoards);
 
-router.get("/:id", services.boards.getBoardById);
+router.get("/:id", verifyAuth, services.boards.getBoardById);
 
-router.patch("/:id", services.boards.editBoardById);
+router.patch("/:id", verifyAuth, services.boards.editBoardById);
 
-router.delete("/:id", services.boards.deleteBoardById);
+router.delete("/:id", verifyAuth, services.boards.deleteBoardById);
 
 export default router;

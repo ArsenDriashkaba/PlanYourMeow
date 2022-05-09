@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { database } from "../..";
+import sequelize from "../config/database";
 
 const addRole = async (req, res) => {
   try {

@@ -1,0 +1,11 @@
+.participant-preview {
+  margin: 0.5rem 0;
+  width: 20vw;
+  border: 0.1rem solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: white;
+}

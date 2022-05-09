@@ -1,11 +1,20 @@
 #register-container {
-  font-size: 1rem;
+  padding: 2rem;
+  font-size: 2rem;
   display: flex;
   flex-direction: column;
   margin: 1rem;
-  background-color: azure;
+  background-color: rgb(246, 246, 246);
+  border-radius: 2rem;
 }
 
 #register-container * {
   margin: 0.1rem;
+}
+
+.register-btn {
+  color: white;
+  background-color: rgb(40, 40, 40);
+  height: 3rem;
+  font-size: 2rem;
 }

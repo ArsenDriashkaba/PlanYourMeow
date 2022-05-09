@@ -76,23 +76,78 @@ const loginHandler = async (req, res) => {
       return;
     }
 
-    const token = jsonwebtoken.sign({ id: user.id }, "planYourMeowSecretToken");
+    const token = jsonwebtoken.sign(
+      { id: user.id },
+      "planYourMeowSecretToken",
+      {
+        expiresIn: 3000,
+      }
+    );
 
-    // req.session.user = user;
+    req.session.user = user;
 
     res.header("authToken", token);
-    res.status(200).send(user.id);
+    res.status(200).send({
+      auth: true,
+      id: user.id,
+      firstName: user.first_name,
+      secondName: user.second_name,
+      token: token,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error!");
   }
 };
 
+const getLoginStatus = async (req, res) => {
+  if (req.session.user) {
+    res.status(200).send({ loggedIn: true, user: req.session.user });
+
+    return;
+  }
+
+  res.status(200).send({ loggedIn: false });
+};
+
+const getAuthInfo = async (req, res) => {};
+
 const getAllUsers = async (req, res) => {
   try {
-    const users = await req.context.models.user.findAll();
+    const users = await req.context.models.user.findAll({
+      include: [sequelize.models.workspace],
+    });
 
     res.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const userModel = models.user;
+
+    if (validationResults.isEmpty()) {
+      const user = await userModel.findOne({
+        where: { id: req.params.id },
+      });
+
+      if (!user) {
+        const userNotFoundMsg = `User with id "${req.params.id}" is not found...`;
+
+        res.status(404).send(userNotFoundMsg);
+
+        return;
+      }
+
+      res.status(200).send(user);
+    } else {
+      res.send(400);
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -213,4 +268,7 @@ export default {
   addUser,
   editUserDataById,
   loginHandler,
+  getLoginStatus,
+  getAuthInfo,
+  getUserById,
 };

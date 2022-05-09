@@ -20,6 +20,9 @@ const workspace = (sequelize) => {
         notEmpty: true,
       },
     },
+    description: {
+      type: DataTypes.STRING,
+    },
   });
 
   return workspaceModel;

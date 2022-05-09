@@ -5,11 +5,13 @@ import WorkspaceDetailPage from "./pages/WorkspaceDetailPage/WorkspaceDetailPage
 import WorkspaceManagePage from "./pages/WorkspaceManagePage/WorkspaceManagePage";
 import TicketDetailPage from "./pages/TicketDetailPage/TicketDetailPage";
 import MainPage from "./pages/MainPage/MainPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 export function Routes() {
   return (
     <RouterRoutes>
       <Route path="/" element={<MainPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/workspaces" element={<WorkspaceListPage />} />
       <Route path="/workspaces/:id" element={<WorkspaceDetailPage />} />
       <Route path="/workspaces/manage/:id" element={<WorkspaceManagePage />} />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 import api from "../../Api";
 
@@ -18,9 +19,11 @@ const RegistrationForm = () => {
 
     api
       .post("/users/", registerInfo)
-      .then((res) => setRegResult(res.data))
-      .catch((error) => setError(error))
-      .finally(() => navigate("/workspaces"));
+      .then((res) => {
+        setRegResult(res.data);
+        navigate("/login");
+      })
+      .catch((error) => setError(error));
   };
 
   const handleNameChange = (event) =>
@@ -94,15 +97,18 @@ const RegistrationForm = () => {
         <p>
           By creating an account you agree to our <span>Terms & Privacy</span>.
         </p>
-        <button type="submit" className="registerbtn">
+        <button type="submit" className="register-btn">
           Register
         </button>
-      </div>
-
-      <div className="container signin">
-        <p>
-          Already have an account? <span>Sign in</span>.
-        </p>
+        <div className="sign-in">
+          <h3>
+            Already have an account?{" "}
+            <span>
+              <Link to={"/login"}>Sign in</Link>
+            </span>
+            .
+          </h3>
+        </div>
       </div>
     </form>
   );
