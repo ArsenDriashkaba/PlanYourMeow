@@ -12,7 +12,7 @@ const BoardList = ({
   errorHandler,
   isChange,
   setIsChange,
-  adminRole,
+  userRole,
 }) => {
   const handleDND = ({ destination, draggableId }) => {
     if (!destination) {
@@ -49,7 +49,7 @@ const BoardList = ({
             errorHandler={errorHandler}
             isChange={isChange}
             setIsChange={setIsChange}
-            adminRole={adminRole}
+            userRole={userRole}
           />
         ))}
       </div>

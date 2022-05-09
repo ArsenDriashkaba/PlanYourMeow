@@ -60,8 +60,6 @@ const TicketDetailPage = () => {
     ...ticketInfo,
   };
 
-  console.log(ticketInfo);
-
   return (
     <section id="ticket-detail-page">
       <ElementPageHeader

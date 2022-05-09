@@ -14,7 +14,7 @@ const Board = ({
   errorHandler,
   boardTickets,
   isChange,
-  adminRole,
+  userRole,
 }) => {
   const [tickets, setTickets] = useState(boardTickets);
   const [error, setError] = useState();
@@ -43,7 +43,7 @@ const Board = ({
           <h2 className="board-name">{name}</h2>
           <span className="count-of-tickets">10</span>
         </div>
-        {adminRole && (
+        {(userRole === 2 || userRole === 1) && (
           <DeleteElementBtn
             reqUrl={"boards"}
             elementId={board_id}
@@ -65,6 +65,7 @@ const Board = ({
           tickets={filteredTicketsByBoard}
           fetchData={setFetchedTickets}
           boardId={board_id}
+          userRole={userRole}
         />
       )}
     </div>

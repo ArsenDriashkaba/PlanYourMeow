@@ -65,7 +65,10 @@ const CustomDropDown = ({
           <button type="submit">Ok</button>
         </form>
       ) : (
-        <button onClick={() => setEditingState(true)}>Change</button>
+        <>
+          <span>{defaultLabel}</span>
+          <button onClick={() => setEditingState(true)}>Change</button>
+        </>
       )}
     </>
   );

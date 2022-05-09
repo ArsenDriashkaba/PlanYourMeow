@@ -11,6 +11,8 @@ router.get("/", verifyAuth, services.tickets.getAllTickets);
 
 router.get("/:id", verifyAuth, services.tickets.getTicketById);
 
+router.get("/:id/:boardId", verifyAuth, services.tickets.getAvailableUsers);
+
 router.patch("/:id", verifyAuth, services.tickets.editTicketById);
 
 router.delete("/:id", verifyAuth, services.tickets.deleteTicketById);

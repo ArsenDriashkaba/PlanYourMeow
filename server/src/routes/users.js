@@ -12,6 +12,8 @@ router.get("/login", services.users.getLoginStatus);
 
 router.get("/userAuth", services.users.getAuthInfo);
 
+router.get("/:id", services.users.getUserById);
+
 router.get("/", services.users.getAllUsers);
 
 router.delete("/:id", services.users.deleteUserById);

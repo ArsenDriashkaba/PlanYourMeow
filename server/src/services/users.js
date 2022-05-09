@@ -80,7 +80,7 @@ const loginHandler = async (req, res) => {
       { id: user.id },
       "planYourMeowSecretToken",
       {
-        expiresIn: 300,
+        expiresIn: 3000,
       }
     );
 
@@ -119,6 +119,35 @@ const getAllUsers = async (req, res) => {
     });
 
     res.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const getUserById = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const userModel = models.user;
+
+    if (validationResults.isEmpty()) {
+      const user = await userModel.findOne({
+        where: { id: req.params.id },
+      });
+
+      if (!user) {
+        const userNotFoundMsg = `User with id "${req.params.id}" is not found...`;
+
+        res.status(404).send(userNotFoundMsg);
+
+        return;
+      }
+
+      res.status(200).send(user);
+    } else {
+      res.send(400);
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -241,4 +270,5 @@ export default {
   loginHandler,
   getLoginStatus,
   getAuthInfo,
+  getUserById,
 };

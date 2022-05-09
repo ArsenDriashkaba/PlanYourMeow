@@ -3,7 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 
 import "./TicketList.css";
 
-const TicketList = ({ tickets, fetchData, boardId }) => {
+const TicketList = ({ tickets, fetchData, boardId, userRole }) => {
   return (
     <Droppable droppableId={`${boardId}`}>
       {(provided) => (
@@ -15,11 +15,11 @@ const TicketList = ({ tickets, fetchData, boardId }) => {
           {tickets?.map((ticket, index) => (
             <Ticket
               key={ticket.id}
-              name={ticket?.name}
-              ticket_id={ticket.id}
+              ticketInfo={ticket}
               fetchData={fetchData}
               boardId={ticket?.boardId}
               index={index}
+              userRole={userRole}
             />
           ))}
           {provided.placeholder}

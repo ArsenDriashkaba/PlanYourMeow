@@ -96,7 +96,7 @@ const WorkspaceDetailPage = () => {
         errorHandler={setError}
         isChange={isChange}
         setIsChange={setIsChange}
-        adminRole={adminRole}
+        userRole={userRole}
       />
     </section>
   );

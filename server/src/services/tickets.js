@@ -1,4 +1,4 @@
-import { sanitize, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import sequelize from "../config/database";
 
 const addTicket = async (req, res) => {
@@ -52,6 +52,40 @@ const getTicketById = async (req, res) => {
       }
 
       res.status(200).send(ticket);
+    } else {
+      res.send(400);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+const getAvailableUsers = async (req, res) => {
+  try {
+    const validationResults = validationResult(req);
+    const models = req.context.models;
+    const ticketModel = models.ticket;
+    const boardModel = models.board;
+    const workspaceModel = models.workspace;
+
+    if (validationResults.isEmpty()) {
+      const board = await boardModel.findOne({
+        where: { id: req.params.boardId },
+      });
+
+      const workspace = await workspaceModel.findOne({
+        where: { id: board?.workspaceId },
+        include: [{ model: sequelize.models.user }],
+      });
+
+      if (!board || !workspace) {
+        res.status(404).send("bad request");
+
+        return;
+      }
+
+      res.status(200).send(workspace.users);
     } else {
       res.send(400);
     }
@@ -140,6 +174,7 @@ export default {
   addTicket,
   getAllTickets,
   getTicketById,
+  getAvailableUsers,
   editTicketById,
   deleteTicketById,
 };
