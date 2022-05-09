@@ -100,17 +100,22 @@ const WorkspaceManagePage = () => {
       />
       <div id="workspace-manage-container">
         <div className="search-add-user-container">
-          <Description
-            description={description}
-            editMode={editMode}
-            fetchData={fetchWorkspaceInfo}
-            setElementParams={setNewWorkspaceParams}
-            elementInfo={workspaceInfo}
-          />
-          <FindAddForm
-            workspaceId={id}
-            updateWorkspaceInfo={fetchWorkspaceInfo}
-          />
+          <div className="description-container">
+            <Description
+              description={description}
+              editMode={editMode}
+              fetchData={fetchWorkspaceInfo}
+              setElementParams={setNewWorkspaceParams}
+              elementInfo={workspaceInfo}
+            />
+          </div>
+          <hr />
+          <div className="find-add-form-container">
+            <FindAddForm
+              workspaceId={id}
+              updateWorkspaceInfo={fetchWorkspaceInfo}
+            />
+          </div>
         </div>
         <div className="manage-users-container">
           <SearchInput

@@ -22,11 +22,8 @@ const Ticket = ({ ticketInfo, fetchData, index, userRole }) => {
     }
 
     const date = new Date(deadlineDate);
-    const month = date.getMonth() + 1;
-    const day = date.getMonth();
-    const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`;
+    return date.toDateString();
   };
 
   const fetchUserInfo = () => {
@@ -68,8 +65,14 @@ const Ticket = ({ ticketInfo, fetchData, index, userRole }) => {
                 </h2>
               </Link>
             </header>
-            <span className="ticket-deadline">{parseDeadline(deadline)}</span>
-            <div className="ticket-person">{userName}</div>
+            {state !== "Done" && (
+              <div className="additional-info-container">
+                <div className="ticket-person">{userName}</div>
+                <span className="ticket-deadline">
+                  {parseDeadline(deadline)}
+                </span>
+              </div>
+            )}
           </div>
           {userRole !== 4 && (
             <DeleteElementBtn

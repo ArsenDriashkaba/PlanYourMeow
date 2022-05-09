@@ -13,3 +13,9 @@ nav {
   color: white;
   text-decoration: none;
 }
+
+.login-register-container button {
+  margin: 0 0.5rem;
+  width: 7rem;
+  height: 3rem;
+}

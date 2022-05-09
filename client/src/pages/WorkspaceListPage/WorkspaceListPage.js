@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router";
 
 import userContext from "../../context/userContext";
 
@@ -17,6 +18,12 @@ const WorkspaceListPage = () => {
   const [userId, setUserId] = useState();
 
   const userCtx = useContext(userContext);
+
+  const navigate = useNavigate();
+
+  if (!userCtx.userId) {
+    navigate("/");
+  }
 
   const setFetchedWorkspaces = () => {
     setLoading(true);

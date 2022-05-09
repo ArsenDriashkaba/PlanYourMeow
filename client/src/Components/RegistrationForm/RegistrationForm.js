@@ -97,15 +97,18 @@ const RegistrationForm = () => {
         <p>
           By creating an account you agree to our <span>Terms & Privacy</span>.
         </p>
-        <button type="submit" className="registerbtn">
+        <button type="submit" className="register-btn">
           Register
         </button>
-      </div>
-
-      <div className="sign-in">
-        <h3>
-          Already have an account? <Link to={"/login"}>Sign in</Link>.
-        </h3>
+        <div className="sign-in">
+          <h3>
+            Already have an account?{" "}
+            <span>
+              <Link to={"/login"}>Sign in</Link>
+            </span>
+            .
+          </h3>
+        </div>
       </div>
     </form>
   );

@@ -64,13 +64,21 @@ const FindAddForm = ({ workspaceId, updateWorkspaceInfo }) => {
 
   return (
     <div className="find-add-user-container">
-      <form action="submit" onSubmit={addUserTotheTeam}>
-        <SearchInput
-          value={searchFilterValue}
-          onChange={(event) => setSearchFilterValue(event.target.value)}
-        />
-        <div className="chosenUser">{chosenUser?.userName}</div>
-        <button type="submit">Add</button>
+      <form
+        className="find-add-user-form"
+        action="submit"
+        onSubmit={addUserTotheTeam}
+      >
+        <div className="user-form-container">
+          <div className="chosenUser">{chosenUser?.userName}</div>
+          <SearchInput
+            value={searchFilterValue}
+            onChange={(event) => setSearchFilterValue(event.target.value)}
+          />
+        </div>
+        <button className="add-user-to-workspace-btn" type="submit">
+          Add
+        </button>
       </form>
       <div id="find-users-list">
         {filteredUsers?.map((filteredUser) => (

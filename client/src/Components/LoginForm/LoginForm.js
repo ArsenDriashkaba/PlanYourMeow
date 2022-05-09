@@ -39,7 +39,7 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit} id="login-form">
       <span>{error?.message}</span>
-      <h2>Sandwich boi</h2>
+      <h2>Login</h2>
       <label>Email : </label>
       <input
         type="text"
@@ -56,9 +56,9 @@ const LoginForm = () => {
         onChange={handlePasswordChange}
         required
       />
-      <button type="submit">Login</button>
-      <input type="checkbox" checked="checked" /> Remember me
-      <span>Forgot password? </span>
+      <button type="submit" className="login-btn">
+        Login
+      </button>
     </form>
   );
 };

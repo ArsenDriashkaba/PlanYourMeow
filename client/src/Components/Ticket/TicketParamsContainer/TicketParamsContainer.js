@@ -40,6 +40,8 @@ const TicketParamsContainer = ({ ticketInfo, fetchData }) => {
   useEffect(() => {
     const data = { deadline: date };
 
+    console.log(data);
+
     api
       .patch(`/tickets/${ticketInfo.id}`, data, {
         headers: { "auth-token": localStorage.getItem("id_token") },

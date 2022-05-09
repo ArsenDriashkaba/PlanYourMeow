@@ -12,10 +12,28 @@
   margin: 0.5rem;
 }
 
+.ticket-info-container {
+  width: 20rem;
+}
+
 .ticket-name {
   font-size: 1.5rem;
 }
 
 .ticket-done {
   text-decoration: line-through;
+}
+
+.ticket-person {
+  font-size: 1.2rem;
+}
+
+.ticket-deadline {
+  font-size: 1rem;
+}
+
+.additional-info-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

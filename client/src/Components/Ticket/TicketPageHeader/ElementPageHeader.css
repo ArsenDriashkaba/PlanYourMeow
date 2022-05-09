@@ -8,3 +8,9 @@
   align-items: center;
   padding: 1rem;
 }
+
+.edit-save-btn {
+  width: 7rem;
+  height: 3rem;
+  background-color: rgb(145, 196, 145);
+}

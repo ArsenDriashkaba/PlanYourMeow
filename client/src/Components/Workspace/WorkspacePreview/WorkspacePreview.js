@@ -52,7 +52,6 @@ const WorkspacePreview = ({
         )}
       </div>
       <hr />
-      <p>Owner: {userCtx?.username}</p>
       <p>Number of participants: {numberOfparticipants}</p>
     </div>
   );

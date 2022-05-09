@@ -28,21 +28,28 @@ const ElementPageHeader = ({
   };
 
   return (
-    <header id="element-page-header">
-      <h1>
-        {editMode ? (
-          <input value={elementName} onChange={changeName}></input>
-        ) : (
-          name
-        )}
-      </h1>
+    <>
+      <header id="element-page-header">
+        <h1>
+          {editMode ? (
+            <input value={elementName} onChange={changeName}></input>
+          ) : (
+            name
+          )}
+        </h1>
 
-      {editMode ? (
-        <button onClick={saveEventHandler}>Save</button>
-      ) : (
-        <button onClick={toggleEditMode}>Edit</button>
-      )}
-    </header>
+        {editMode ? (
+          <button className="edit-save-btn" onClick={saveEventHandler}>
+            Save
+          </button>
+        ) : (
+          <button className="edit-save-btn" onClick={toggleEditMode}>
+            Edit
+          </button>
+        )}
+      </header>
+      <hr />
+    </>
   );
 };
 

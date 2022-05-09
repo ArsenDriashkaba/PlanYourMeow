@@ -21,3 +21,10 @@
   height: 3rem;
   border-radius: 0.4rem;
 }
+
+#manage-workspace {
+  width: 9rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  border: 0.2rem solid black;
+}

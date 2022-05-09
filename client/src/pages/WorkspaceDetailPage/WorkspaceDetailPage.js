@@ -74,7 +74,7 @@ const WorkspaceDetailPage = () => {
   return (
     <section id="board-list-section">
       <header id="board-list-header">
-        <h1>{workspace?.name}</h1>
+        <h1>Title: {workspace?.name}</h1>
         {adminRole && (
           <CreateInput
             elementId={id}
